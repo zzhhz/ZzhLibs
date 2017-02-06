@@ -1,4 +1,5 @@
-# ZzhLibs本依赖库
+#
+# ZzhLibs本依赖库，自己总结的，欢迎有提意见
 #简单的封装了BaseActivity,BaseFragment,还有一个ZUtils工具类。
 #一、BaseActivity，BaseFragment
     1.封装Hanlder
@@ -9,4 +10,5 @@
     2.日期格式化
     3.网络判断
     4.屏幕宽高
+    5.SD存储卡的简单操作
 #
