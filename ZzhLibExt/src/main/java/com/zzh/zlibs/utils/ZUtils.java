@@ -341,7 +341,7 @@ public class ZUtils {
      *
      * @return
      */
-    public static String gainSDCardPath() {
+    public static String getSDCardRootPath() {
         if (isMountedSDCard()) {
             File sdcardDir = Environment.getExternalStorageDirectory();
             if (!sdcardDir.canWrite()) {
