@@ -1,5 +1,5 @@
 #
-# ZzhLibs本依赖库，自己总结的，如果有不妥之处，敬请之处。我再修改。
+# ZzhLibs本依赖库，自己总结的，如果有不妥之处，敬请指出，我再修改。
 #简单的封装了BaseActivity,BaseFragment,还有一个ZUtils工具类。
 #一、BaseActivity，BaseFragment
     1.封装Hanlder
