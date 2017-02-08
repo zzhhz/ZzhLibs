@@ -13,5 +13,16 @@
     5.SD存储卡的简单操作
 #状态栏透明（将布局延伸到状态栏）
     Android版本4.4之后才支持的，只是仅仅使用Theme进行设置的。
+#使用方式
+    allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+-----------
+    dependencies {
+	        compile 'com.github.zzhhz:ZzhLibs:0.0.1'
+	}
 
 
