@@ -260,17 +260,17 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
         return true;
     }
     //申请到权限
-    protected void notifyPermission(int code){
+    protected void notifyPermission(int code, boolean flag){
 
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (verifyPermissions(grantResults)){
-            notifyPermission(requestCode);
+            notifyPermission(requestCode, true);
             loge("--");
         } else {
-            showMessage("请在手机设置中授予应用权限");
+            notifyPermission(requestCode, false);
         }
         /*switch (requestCode){
             case REQUEST_CODE_READ_PERMISSION:
