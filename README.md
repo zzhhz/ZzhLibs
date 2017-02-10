@@ -24,5 +24,10 @@
     dependencies {
 	        compile 'com.github.zzhhz:ZzhLibs:0.0.1'
 	}
+#问题
+    1. 在主题中使用到了android:windowIsTranslucent true属性，但是这个属性将Activity的生命周期执行，有些影响。
+        ~例如：A Activity 跳转到B Activity。A 的生命周期是没有走onStop方法的。同样，在B Activity 按下返回键，A 只走了onResume方法。
+    在项目中如果需要依赖生命周期执行方法，要特别注意
+
 
 
