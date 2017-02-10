@@ -74,19 +74,22 @@ public abstract class BaseNoSwipeBackActivity extends AppCompatActivity implemen
         return mToolbar;
     }
 
-    protected void toolbars(String title, Toolbar.OnClickListener clickListener) {
+    protected void toolbars(String title, Toolbar.OnClickListener clickListener){
+        toolbars(title, -1, clickListener);
+    }
+
+    protected void toolbars(String title, int ic_back,Toolbar.OnClickListener clickListener) {
         try {
             mToolbar = getToolbar();
         } catch (Exception ex) {
             loge("没有设置toolbar");
         }
-        //toolBarTitle = (TextView) findViewById(R.id.toolbar_title);
         if (mToolbar == null)
             return;
-        //mToolbar.setTitle("");
-        //mToolbar.setNavigationIcon(R.mipmap.icon_back);
-        if (toolBarTitle != null) {
-            toolBarTitle.setText(title);
+        if (ic_back > 0)
+            mToolbar.setNavigationIcon(ic_back);
+        if (title != null) {
+            mToolbar.setTitle(title);
         }
         if (clickListener == null) {
             mToolbar.setNavigationOnClickListener(new Toolbar.OnClickListener() {
