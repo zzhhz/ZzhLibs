@@ -204,6 +204,9 @@ public abstract class BaseNoSwipeBackActivity extends AppCompatActivity implemen
         }
     }
 
+    /**
+     * 申请读写SD卡的权限
+     */
     protected void requestReadStoragePermission() {
         String[] permission = {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -249,6 +252,12 @@ public abstract class BaseNoSwipeBackActivity extends AppCompatActivity implemen
         return true;
     }
     //申请到权限
+
+    /**
+     * 通知申请到得权限
+     * @param code 自定义的Request Code 和自己申请权限时是一致的
+     * @param flag true 申请权限成功，false没有申请到权限
+     */
     protected void notifyPermission(int code, boolean flag){
 
     }

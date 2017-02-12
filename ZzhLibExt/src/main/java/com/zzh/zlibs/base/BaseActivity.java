@@ -30,6 +30,7 @@ import com.zzh.zlibs.swipe.activity.SwipeBackActivity;
  * 初始化数据<br />
  * 给控件设置监听事件<br />
  * 滑动退出当前页面<br />
+ * 广播没有封装，因为可以用第三方库,例如EventBus.
  */
 public abstract class BaseActivity extends SwipeBackActivity implements View.OnClickListener {
     protected static String TAG;
@@ -188,6 +189,9 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
         super.onDestroy();
         /*if (mReceiver != null)
             mContext.unregisterReceiver(mReceiver);*/
+        if (mHandler != null){
+            mHandler.removeCallbacksAndMessages(null);
+        }
     }
 
     /**
