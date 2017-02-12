@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.zzh.zlibs.BuildConfig;
 import com.zzh.zlibs.swipe.activity.SwipeBackActivity;
 
 /**
@@ -82,7 +81,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
         try {
             mToolbar = getToolbar();
         } catch (Exception ex) {
-            loge("没有设置toolbar");
+            Log.e(TAG, "-----没有设置toolbar");
         }
         if (mToolbar == null)
             return;
@@ -184,22 +183,6 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
         mToast.show();
     }
 
-    /***
-     * 记录日志
-     *
-     * @param msg 日志信息
-     */
-    protected void loge(String msg) {
-        if (BuildConfig.DEBUG) {
-            Log.e(TAG, "------" + msg + "---");
-        }
-    }
-    protected void logd(String msg) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "------" + msg + "---");
-        }
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -207,13 +190,19 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
             mContext.unregisterReceiver(mReceiver);*/
     }
 
-    //6.0处理申请权限
+    /**
+     * 6.0处理申请权限，大于Build.VERSION_CODES.M，则申请权限，否则可以直接使用权限
+     * @param permission 申请的权限
+     * @param code
+     */
     protected void requestPermission(String[] permission, int code) {
         if (permission == null) {
             return;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             ActivityCompat.requestPermissions(this, permission, code);
+        } else {
+            notifyPermission(code, true);
         }
     }
 
@@ -230,8 +219,11 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
                 break outer;
             }
         }
+
         if (!result) {
             requestPermission(permission, REQUEST_CODE_READ_PERMISSION);
+        } else {
+            notifyPermission(REQUEST_CODE_READ_PERMISSION, true);
         }
     }
 
@@ -268,7 +260,6 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (verifyPermissions(grantResults)){
             notifyPermission(requestCode, true);
-            loge("--");
         } else {
             notifyPermission(requestCode, false);
         }

@@ -19,8 +19,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.zzh.zlibs.BuildConfig;
-
 /**
  * Created by zzh on 2016/1/29.
  * 对BaseActivity的一些封装：<br />
@@ -82,7 +80,7 @@ public abstract class BaseNoSwipeBackActivity extends AppCompatActivity implemen
         try {
             mToolbar = getToolbar();
         } catch (Exception ex) {
-            loge("没有设置toolbar");
+            Log.e(TAG, "没有设置toolbar");
         }
         if (mToolbar == null)
             return;
@@ -184,22 +182,6 @@ public abstract class BaseNoSwipeBackActivity extends AppCompatActivity implemen
         mToast.show();
     }
 
-    /***
-     * 记录日志
-     *
-     * @param msg 日志信息
-     */
-    protected void loge(String msg) {
-        if (BuildConfig.DEBUG) {
-            Log.e(TAG, "------" + msg + "---");
-        }
-    }
-    protected void logd(String msg) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "------" + msg + "---");
-        }
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -217,6 +199,8 @@ public abstract class BaseNoSwipeBackActivity extends AppCompatActivity implemen
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             ActivityCompat.requestPermissions(this, permission, code);
+        } else {
+            notifyPermission(code, true);
         }
     }
 
@@ -235,6 +219,8 @@ public abstract class BaseNoSwipeBackActivity extends AppCompatActivity implemen
         }
         if (!result) {
             requestPermission(permission, REQUEST_CODE_READ_PERMISSION);
+        } else {
+            notifyPermission(REQUEST_CODE_READ_PERMISSION, true);
         }
     }
 
@@ -271,7 +257,6 @@ public abstract class BaseNoSwipeBackActivity extends AppCompatActivity implemen
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (verifyPermissions(grantResults)){
             notifyPermission(requestCode, true);
-            loge("--");
         } else {
             notifyPermission(requestCode, false);
         }
