@@ -353,6 +353,30 @@ public class ZUtils {
     }
 
     /**
+     * 获取可用的SD卡文件实例
+     * @return SD卡文件实例
+     */
+    public static File getSDCardRootFile(){
+        if (isMountedSDCard()){
+            return Environment.getExternalStorageDirectory();
+        }
+        return null;
+    }
+
+    /**
+     * 返回指定的文件路径
+     * @param type 文件类型
+     * @return
+     */
+    public static String getSDCardDirectory(String type){
+
+        if (isMountedSDCard()){
+           return Environment.getExternalStoragePublicDirectory(type).getAbsolutePath();
+        }
+        return null;
+    }
+
+    /**
      * 判断网络是否可用
      *
      * @param ctx
