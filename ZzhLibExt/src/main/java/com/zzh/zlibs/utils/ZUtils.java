@@ -13,6 +13,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -374,6 +375,52 @@ public class ZUtils {
            return Environment.getExternalStoragePublicDirectory(type).getAbsolutePath();
         }
         return null;
+    }
+
+    /**
+     * 创建文件夹
+     * @param filePath 文件夹路径
+     * @return
+     */
+    public static boolean createSDCardDirectory(String filePath)
+    {
+        if (isMountedSDCard()){
+            String sdCardRootPath = getSDCardRootPath();
+            File file = new File(sdCardRootPath, filePath);
+            if (!file.exists())
+            {
+                return file.mkdirs();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 创建文件
+     * @param path 文件路径
+     * @return
+     */
+    public static boolean createSDCardFile(String path){
+        if (isMountedSDCard()){
+            File file = new File(path);
+            if (file.exists()){
+                return true;
+            } else {
+                File parentFile = file.getParentFile();
+                boolean mkdirs = parentFile.mkdirs();
+                if (mkdirs){
+                    try {
+                        return file.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
