@@ -15,7 +15,7 @@
         <item name="android:activityCloseExitAnimation">@anim/slide_right_out</item>
     </style>
     <!--基本主题-->
-    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowAnimationStyle">@style/Activity</item>
         <!--去掉actionbar-->
         <item name="windowActionBar">false</item>
