@@ -86,6 +86,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
         }
         if (mToolbar == null)
             return;
+        setSupportActionBar(mToolbar);
         if (ic_back > 0)
             mToolbar.setNavigationIcon(ic_back);
         if (title != null) {

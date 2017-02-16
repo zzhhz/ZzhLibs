@@ -84,6 +84,7 @@ public abstract class BaseNoSwipeBackActivity extends AppCompatActivity implemen
         }
         if (mToolbar == null)
             return;
+        setSupportActionBar(mToolbar);
         if (ic_back > 0)
             mToolbar.setNavigationIcon(ic_back);
         if (title != null) {
