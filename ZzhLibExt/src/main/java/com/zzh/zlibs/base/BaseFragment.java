@@ -49,7 +49,7 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         int contentId = setLayoutResId();
         if (mContainer == null) {
-            View mContainer = inflater.inflate(contentId, null);
+            mContainer = inflater.inflate(contentId, null);
             init(mContainer);
         }
         return mContainer;
