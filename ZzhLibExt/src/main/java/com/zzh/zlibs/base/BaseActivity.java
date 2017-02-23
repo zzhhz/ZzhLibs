@@ -56,6 +56,14 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
 
     protected abstract int setLayoutId();
 
+    protected void toolbars(int toolbarId, int resId, String title, Toolbar.OnClickListener clickListener){
+        setToolbar(toolbarId);
+        toolbars(title,resId,clickListener);
+    }
+    protected void toolbars(Toolbar toolbar, int resId, String title, Toolbar.OnClickListener clickListener){
+        setToolbar(toolbar);
+        toolbars(title,resId,clickListener);
+    }
 
     //设置Toolbar
     protected void toolbars(String title){
