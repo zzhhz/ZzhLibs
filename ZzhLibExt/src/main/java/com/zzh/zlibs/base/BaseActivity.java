@@ -99,6 +99,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
         if (title != null) {
             mToolbar.setTitle(title);
         }
+        setSupportActionBar(mToolbar);
         if (clickListener == null) {
             mToolbar.setNavigationOnClickListener(new Toolbar.OnClickListener() {
                 @Override
@@ -109,7 +110,6 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
         } else {
             mToolbar.setNavigationOnClickListener(clickListener);
         }
-		setSupportActionBar(mToolbar);
     }
 
 

@@ -98,6 +98,7 @@ public abstract class BaseNoSwipeBackActivity extends AppCompatActivity implemen
         if (title != null) {
             mToolbar.setTitle(title);
         }
+        setSupportActionBar(mToolbar);
         if (clickListener == null) {
             mToolbar.setNavigationOnClickListener(new Toolbar.OnClickListener() {
                 @Override
@@ -108,7 +109,6 @@ public abstract class BaseNoSwipeBackActivity extends AppCompatActivity implemen
         } else {
             mToolbar.setNavigationOnClickListener(clickListener);
         }
-		setSupportActionBar(mToolbar);
     }
 
 
