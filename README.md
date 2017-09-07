@@ -22,7 +22,7 @@
 	}
 -----------
     dependencies {
-	        compile 'com.github.zzhhz:ZzhLibs:0.0.1'
+	        compile 'com.github.zzhhz:ZzhLibs:0.1.1'
 	}
 #问题
     1. 在主题中使用到了android:windowIsTranslucent true属性，但是这个属性将Activity的生命周期执行，有些影响。
