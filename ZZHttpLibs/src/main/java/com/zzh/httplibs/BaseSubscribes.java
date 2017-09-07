@@ -1,7 +1,8 @@
 package com.zzh.httplibs;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by ZZH on 2017/9/7.
@@ -12,9 +13,10 @@ import org.reactivestreams.Subscription;
  * @Author: zzh
  * @Description:
  */
-public class BaseSubscribes<T> implements Subscriber<T> {
+public class BaseSubscribes<T> implements Observer<T> {
+
     @Override
-    public void onSubscribe(Subscription s) {
+    public void onSubscribe(@NonNull Disposable d) {
 
     }
 
