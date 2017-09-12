@@ -65,6 +65,14 @@ public abstract class BaseNoSwipeBackActivity extends AppCompatActivity implemen
         toolbars(title,resId,clickListener);
     }
 
+    protected void setToolbarAndTitle(int toolbarId, int titleId){
+        setToolbar(toolbarId);
+        setToolBarTitle(titleId);
+    }
+    public void setToolBarTitle(int titleId) {
+        this.mTitle = mToolbar.findViewById(titleId);
+    }
+
 
     //设置Toolbar
     protected void toolbars(String title){
