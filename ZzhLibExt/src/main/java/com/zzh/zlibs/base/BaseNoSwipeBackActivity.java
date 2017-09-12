@@ -19,6 +19,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zzh.zlibs.R;
+
 /**
  * Created by zzh on 2016/1/29.
  * 对BaseActivity的一些封装：<br />
@@ -36,7 +38,7 @@ public abstract class BaseNoSwipeBackActivity extends AppCompatActivity implemen
     protected BaseHandler mHandler;
     protected Toast mToast;
     protected Toolbar mToolbar;
-    protected TextView toolBarTitle;
+    protected TextView mTitle;
     //权限
     protected static final int REQUEST_CODE_READ_PERMISSION = 2000;
 
@@ -88,6 +90,9 @@ public abstract class BaseNoSwipeBackActivity extends AppCompatActivity implemen
     protected void toolbars(String title, int ic_back,Toolbar.OnClickListener clickListener) {
         try {
             mToolbar = getToolbar();
+            if (mToolbar == null) {
+                this.mToolbar = (Toolbar) findViewById(R.id.toolbar);
+            }
         } catch (Exception ex) {
             Log.e(TAG, "没有设置toolbar");
         }
@@ -95,8 +100,9 @@ public abstract class BaseNoSwipeBackActivity extends AppCompatActivity implemen
             return;
         if (ic_back > 0)
             mToolbar.setNavigationIcon(ic_back);
-        if (title != null) {
-            mToolbar.setTitle(title);
+        mToolbar.setTitle("");
+        if (title != null && mTitle != null) {
+            mTitle.setText(title);
         }
         setSupportActionBar(mToolbar);
         if (clickListener == null) {

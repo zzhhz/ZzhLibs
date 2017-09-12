@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zzh.zlibs.R;
 import com.zzh.zlibs.swipe.activity.SwipeBackActivity;
 
 /**
@@ -38,7 +39,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
     protected BaseHandler mHandler;
     protected Toast mToast;
     protected Toolbar mToolbar;
-    protected TextView toolBarTitle;
+    protected TextView mTitle;
     //权限
     protected static final int REQUEST_CODE_READ_PERMISSION = 2000;
 
@@ -56,48 +57,109 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
 
     protected abstract int setLayoutId();
 
-    protected void toolbars(int toolbarId, int resId, String title, Toolbar.OnClickListener clickListener){
+    /**
+     * 有toolbar，但是没有title
+     *
+     * @param toolbarId     toolbar
+     * @param resId         返回按钮
+     * @param title         标题
+     * @param clickListener 点击事件
+     */
+    protected void toolbars(int toolbarId, int resId, String title, Toolbar.OnClickListener clickListener) {
         setToolbar(toolbarId);
-        toolbars(title,resId,clickListener);
+        toolbars(title, resId, clickListener);
     }
-    protected void toolbars(Toolbar toolbar, int resId, String title, Toolbar.OnClickListener clickListener){
+
+    /**
+     * 有toolbar，但是没有title
+     *
+     * @param toolbar       toolbar
+     * @param resId         返回按钮
+     * @param title         标题
+     * @param clickListener 点击事件
+     */
+    protected void toolbars(Toolbar toolbar, int resId, String title, Toolbar.OnClickListener clickListener) {
         setToolbar(toolbar);
-        toolbars(title,resId,clickListener);
+        toolbars(title, resId, clickListener);
+    }
+
+    /**
+     * 有toolbar，有title
+     *
+     * @param toolbarId     toolbar
+     * @param titleId       toolbar里面的标题
+     * @param title         标题
+     * @param ic_back       返回按钮
+     * @param clickListener 点击事件
+     */
+    protected void toolbars(int toolbarId, int titleId, String title, int ic_back, Toolbar.OnClickListener clickListener) {
+        setToolbar(toolbarId);
+        setToolBarTitle(titleId);
+        toolbars(title, ic_back, clickListener);
+    }
+
+    /**
+     * @param toolbar       toolbar
+     * @param titleId       toolbar里面的标题
+     * @param title         标题
+     * @param ic_back       返回按钮
+     * @param clickListener 点击事件
+     */
+    protected void toolbars(Toolbar toolbar, int titleId, String title, int ic_back, Toolbar.OnClickListener clickListener) {
+        setToolbar(toolbar);
+        setToolBarTitle(titleId);
+        toolbars(title, ic_back, clickListener);
     }
 
     //设置Toolbar
-    protected void toolbars(String title){
+    protected void toolbars(String title) {
         toolbars(title, null);
+    }
+
+    protected void setToolbarAndTitle(int toolbarId, int titleId){
+        setToolbar(toolbarId);
+        setToolBarTitle(titleId);
     }
 
     public void setToolbar(int toolbarId) {
         this.mToolbar = (Toolbar) findViewById(toolbarId);
     }
 
+    public void setToolBarTitle(int titleId) {
+        this.mTitle = mToolbar.findViewById(titleId);
+    }
+
     public void setToolbar(Toolbar mToolbar) {
         this.mToolbar = mToolbar;
     }
 
-    public Toolbar getToolbar(){
+    public Toolbar getToolbar() {
         return mToolbar;
     }
 
-    protected void toolbars(String title, Toolbar.OnClickListener clickListener){
+    protected void toolbars(String title, Toolbar.OnClickListener clickListener) {
         toolbars(title, -1, clickListener);
     }
 
-    protected void toolbars(String title, int ic_back,Toolbar.OnClickListener clickListener) {
+    protected void toolbars(String title, int ic_back, Toolbar.OnClickListener clickListener) {
         try {
             mToolbar = getToolbar();
+            if (mToolbar == null) {
+                this.mToolbar = (Toolbar) findViewById(R.id.toolbar);
+            }
         } catch (Exception ex) {
             Log.e(TAG, "-----没有设置toolbar");
         }
         if (mToolbar == null)
             return;
+
+        mToolbar.setTitle("");
+
         if (ic_back > 0)
             mToolbar.setNavigationIcon(ic_back);
-        if (title != null) {
-            mToolbar.setTitle(title);
+
+        if (title != null && mTitle != null) {
+            mTitle.setText(title);
         }
         setSupportActionBar(mToolbar);
         if (clickListener == null) {
@@ -198,13 +260,14 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
         super.onDestroy();
         /*if (mReceiver != null)
             mContext.unregisterReceiver(mReceiver);*/
-        if (mHandler != null){
+        if (mHandler != null) {
             mHandler.removeCallbacksAndMessages(null);
         }
     }
 
     /**
      * 6.0处理申请权限，大于Build.VERSION_CODES.M，则申请权限，否则可以直接使用权限
+     *
      * @param permission 申请的权限
      * @param code
      */
@@ -225,10 +288,10 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         };
         boolean result = true;//默认已经都授权了
-        outer :
-        for (String per:permission){
+        outer:
+        for (String per : permission) {
             result = verifyGrantPermission(per);
-            if (!result){
+            if (!result) {
                 break outer;
             }
         }
@@ -241,9 +304,9 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
     }
 
     //判断是否授予了权限
-    protected boolean verifyGrantPermission(String permission){
+    protected boolean verifyGrantPermission(String permission) {
         boolean result;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             result = (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED);
         } else {
             result = PermissionChecker.checkSelfPermission(this, permission)
@@ -264,14 +327,15 @@ public abstract class BaseActivity extends SwipeBackActivity implements View.OnC
         }
         return true;
     }
+
     //申请到权限
-    protected void notifyPermission(int code, boolean flag){
+    protected void notifyPermission(int code, boolean flag) {
 
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (verifyPermissions(grantResults)){
+        if (verifyPermissions(grantResults)) {
             notifyPermission(requestCode, true);
         } else {
             notifyPermission(requestCode, false);
