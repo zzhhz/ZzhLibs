@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 27
@@ -27,13 +26,4 @@ dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     api 'com.android.support:appcompat-v7:27.1.1'
     androidTestImplementation 'junit:junit:4.12'
-}
-//添加
-publish {
-    userOrg = 'zzhhz'//bintray.com用户名
-    groupId = 'com.github.zzhhz'//jcenter上的路径
-    artifactId = 'ZzhLibs'//项目名称
-    publishVersion = '0.1.4'//版本号
-    desc = 'Oh hi, this is a nice description for a project, right?'
-    website = 'https://github.com/zzhhz/ZzhLibs'
 }
