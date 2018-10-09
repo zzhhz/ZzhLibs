@@ -144,8 +144,7 @@ public class ZUtils {
      * @return 屏幕宽度
      */
     public static int getDisplayWidth(Context ctx) {
-        DisplayMetrics dm = new DisplayMetrics();
-        ((Activity) ctx).getWindowManager().getDefaultDisplay().getMetrics(dm);
+        DisplayMetrics dm =  ctx.getResources().getDisplayMetrics();
         return dm.widthPixels;
     }
 
@@ -156,8 +155,7 @@ public class ZUtils {
      * @return 屏幕高度
      */
     public static int getDisplayHeight(Context ctx) {
-        DisplayMetrics metrics = new DisplayMetrics();
-        ((Activity) ctx).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        DisplayMetrics metrics = ctx.getResources().getDisplayMetrics();
         return metrics.heightPixels;
     }
 
@@ -195,7 +193,7 @@ public class ZUtils {
         if (date == null) {
             return null;
         }
-        long diff = new Date().getTime() - date.getTime();
+        long diff = System.currentTimeMillis() - date.getTime();
         long r = 0;
         if (diff > year) {
             r = (diff / year);
@@ -446,7 +444,7 @@ public class ZUtils {
      * @param mContext
      * @return
      */
-    private static boolean isWifi(Context mContext) {
+    public static boolean isWifi(Context mContext) {
         ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         if (ni != null && ni.getType() == ConnectivityManager.TYPE_WIFI) {
