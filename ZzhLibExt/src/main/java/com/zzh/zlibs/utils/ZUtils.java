@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
@@ -47,7 +48,7 @@ import java.util.regex.Pattern;
  * @Email: zzh_hz@126.com
  * @QQ: 1299234582
  * @Author: zzh
- * @Description: 对一些工具的封装<br/>
+ * @Description: 对一些工具的封装<br />
  * 1.单位转换<br/>
  * 2.日期格式化<br/>
  * 3.网络判断<br/>
@@ -144,7 +145,7 @@ public class ZUtils {
      * @return 屏幕宽度
      */
     public static int getDisplayWidth(Context ctx) {
-        DisplayMetrics dm =  ctx.getResources().getDisplayMetrics();
+        DisplayMetrics dm = ctx.getResources().getDisplayMetrics();
         return dm.widthPixels;
     }
 
@@ -336,6 +337,33 @@ public class ZUtils {
     }
 
     /**
+     * 是否是pad
+     *
+     * @param ctx
+     * @return
+     */
+    public static boolean isPad(Context ctx) {
+        return (ctx.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+
+    /**
+     * 是否可以打电话
+     *
+     * @param activity
+     * @return
+     */
+    public static boolean isCall(Activity activity) {
+        TelephonyManager telephony = (TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE);
+        if (telephony.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * 获取可用的SD卡路径（若SD卡不没有挂载则返回""）
      *
      * @return
@@ -353,10 +381,11 @@ public class ZUtils {
 
     /**
      * 获取可用的SD卡文件实例
+     *
      * @return SD卡文件实例
      */
-    public static File getSDCardRootFile(){
-        if (isMountedSDCard()){
+    public static File getSDCardRootFile() {
+        if (isMountedSDCard()) {
             return Environment.getExternalStorageDirectory();
         }
         return null;
@@ -364,29 +393,29 @@ public class ZUtils {
 
     /**
      * 返回指定的文件路径
+     *
      * @param type 文件类型
      * @return
      */
-    public static String getSDCardDirectory(String type){
+    public static String getSDCardDirectory(String type) {
 
-        if (isMountedSDCard()){
-           return Environment.getExternalStoragePublicDirectory(type).getAbsolutePath();
+        if (isMountedSDCard()) {
+            return Environment.getExternalStoragePublicDirectory(type).getAbsolutePath();
         }
         return null;
     }
 
     /**
      * 创建文件夹
+     *
      * @param filePath 文件夹路径
      * @return
      */
-    public static boolean createSDCardDirectory(String filePath)
-    {
-        if (isMountedSDCard()){
+    public static boolean createSDCardDirectory(String filePath) {
+        if (isMountedSDCard()) {
             String sdCardRootPath = getSDCardRootPath();
             File file = new File(sdCardRootPath, filePath);
-            if (!file.exists())
-            {
+            if (!file.exists()) {
                 return file.mkdirs();
             }
         }
@@ -395,18 +424,19 @@ public class ZUtils {
 
     /**
      * 创建文件
+     *
      * @param path 文件路径
      * @return
      */
-    public static boolean createSDCardFile(String path){
-        if (isMountedSDCard()){
+    public static boolean createSDCardFile(String path) {
+        if (isMountedSDCard()) {
             File file = new File(path);
-            if (file.exists()){
+            if (file.exists()) {
                 return true;
             } else {
                 File parentFile = file.getParentFile();
                 boolean mkdirs = parentFile.mkdirs();
-                if (mkdirs){
+                if (mkdirs) {
                     try {
                         return file.createNewFile();
                     } catch (IOException e) {
@@ -455,11 +485,12 @@ public class ZUtils {
 
     /**
      * 判断是哪一种网络
+     *
      * @param ctx
      * @return
      */
     public static NetType getNetType(Context ctx) {
-        if (!isNetWork(ctx)){
+        if (!isNetWork(ctx)) {
             return NetType.NONETWORK;//不可用网络
         }
         NetType type = NetType.NONE;
