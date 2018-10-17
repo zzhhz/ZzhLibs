@@ -4,11 +4,17 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.os.StatFs;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -48,7 +54,7 @@ import java.util.regex.Pattern;
  * @Email: zzh_hz@126.com
  * @QQ: 1299234582
  * @Author: zzh
- * @Description: 对一些工具的封装<br />
+ * @Description: 对一些工具的封装<br                                                                                                                               />
  * 1.单位转换<br/>
  * 2.日期格式化<br/>
  * 3.网络判断<br/>
@@ -539,6 +545,37 @@ public class ZUtils {
             }
         }
         return type;
+    }
+
+    /**
+     * 给 View 背景着色
+     *
+     * @param drawable
+     * @param colors
+     * @return
+     */
+    public static Drawable tintDrawable(Drawable drawable, ColorStateList colors) {
+        final Drawable wrappedDrawable = DrawableCompat.wrap(drawable.mutate());
+        DrawableCompat.setTintList(wrappedDrawable, colors);
+        return wrappedDrawable;
+    }
+
+    /**
+     * @param drawable
+     * @param colors
+     * @return
+     */
+    public static Drawable tintDrawable(Drawable drawable, @ColorInt int colors) {
+        return tintDrawable(drawable, ColorStateList.valueOf(colors));
+    }
+
+    /**
+     * @param drawable
+     * @param colors
+     * @return
+     */
+    public static Drawable tintDrawable(Drawable drawable, String colors) {
+        return tintDrawable(drawable, ColorStateList.valueOf(Color.parseColor(colors)));
     }
 
     public enum NetType {

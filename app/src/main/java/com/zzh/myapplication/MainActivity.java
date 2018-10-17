@@ -1,9 +1,12 @@
 package com.zzh.myapplication;
 
 import android.Manifest;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
+
+import com.zzh.zlibs.utils.PermissionManager;
 
 public class MainActivity extends BaseGitActivity {
     @Override
@@ -13,6 +16,23 @@ public class MainActivity extends BaseGitActivity {
 
     public void onClickView(View v) {
         checkPermissions();
+    }
+
+    public void onClickCheckPermission(View v) {
+        PermissionManager.checkAndRequestMorePermissions(this, new String[]{
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA}, 1000,
+                new PermissionManager.PermissionRequestSuccessCallBack() {
+                    @Override
+                    public void onHasPermission() {
+                        Log.d(TAG, "onHasPermission: 已经授予了权限");
+                    }
+                });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     public void onClickWriteView(View v) {
