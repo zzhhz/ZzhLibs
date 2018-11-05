@@ -31,4 +31,11 @@
         android:onClick="onClickCheckPermission"
         android:text="申请权限PersmissionManager" />
 
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClickThread"
+        android:text="线程池测试" />
+
 </LinearLayout>

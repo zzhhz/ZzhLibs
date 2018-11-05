@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.zzh.zlibs.utils.PermissionManager;
+import com.zzh.zlibs.utils.thread.ZThreadManager;
 
 public class MainActivity extends BaseGitActivity {
     @Override
@@ -53,7 +54,39 @@ public class MainActivity extends BaseGitActivity {
         Log.d(TAG, "checkPermissions  i: " + i);
         Log.d(TAG, "checkPermissions  b: " + b);
         Log.d(TAG, "checkPermissions  verifyGrantPermission: " + verifyGrantPermission);
+    }
 
+    /**
+     * 线程测试
+     *
+     * @param v
+     */
+    public void onClickThread(View v) {
 
+        ZThreadManager instance = ZThreadManager.getInstance();
+
+        for (int i = 0; i < 16; i++) {
+            instance.execute(new TestRunnable(String.valueOf(i)));
+        }
+        Log.d(TAG, "onClickThread: -----------------------------------------------------------------");
+
+    }
+
+    class TestRunnable implements Runnable {
+        private String name;
+
+        public TestRunnable(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(3000);
+                Log.d(TAG, "Thread name run: " + Thread.currentThread().getName() + ", " + name + " , 线程执行完成");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
