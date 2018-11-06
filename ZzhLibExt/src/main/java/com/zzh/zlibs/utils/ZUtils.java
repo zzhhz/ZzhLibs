@@ -13,7 +13,6 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 import android.os.StatFs;
 import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;

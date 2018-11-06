@@ -1,13 +1,17 @@
 package com.zzh.myapplication;
 
 import android.Manifest;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 
+import com.zzh.zlibs.camera.Camera21Activity;
 import com.zzh.zlibs.utils.PermissionManager;
 import com.zzh.zlibs.utils.thread.ZThreadManager;
+
+import java.util.Arrays;
 
 public class MainActivity extends BaseGitActivity {
     @Override
@@ -20,9 +24,21 @@ public class MainActivity extends BaseGitActivity {
     }
 
     public void onClickCheckPermission(View v) {
-        PermissionManager.checkAndRequestMorePermissions(this, new String[]{
+        /*PermissionManager.checkAndRequestMorePermissions(this, new String[]{
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.CAMERA}, 1000,
+                new PermissionManager.PermissionRequestSuccessCallBack() {
+                    @Override
+                    public void onHasPermission() {
+                        Log.d(TAG, "onHasPermission: 已经授予了权限");
+                    }
+                });*/
+        PermissionManager.checkAndRequestMorePermissions(this, new String[]{
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_PHONE_STATE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+
+                }, 1000,
                 new PermissionManager.PermissionRequestSuccessCallBack() {
                     @Override
                     public void onHasPermission() {
@@ -33,7 +49,7 @@ public class MainActivity extends BaseGitActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d(TAG, "onRequestPermissionsResult: " + requestCode + ", " + Arrays.toString(permissions) + ", " + Arrays.toString(grantResults) + ", " + PermissionManager.isPermissionRequestSuccess(grantResults));
     }
 
     public void onClickWriteView(View v) {
@@ -63,7 +79,7 @@ public class MainActivity extends BaseGitActivity {
      */
     public void onClickThread(View v) {
 
-        ZThreadManager instance = ZThreadManager.getInstance();
+        ZThreadManager instance = new ZThreadManager.Builder().setFifo(false).build();
 
         for (int i = 0; i < 16; i++) {
             instance.execute(new TestRunnable(String.valueOf(i)));
@@ -88,5 +104,10 @@ public class MainActivity extends BaseGitActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void onClickTakePicture(View v) {
+        Intent in = new Intent(this, Camera21Activity.class);
+        startActivity(in);
     }
 }
