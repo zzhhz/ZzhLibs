@@ -82,8 +82,8 @@ public class MainActivity extends BaseGitActivity {
         @Override
         public void run() {
             try {
-                Thread.sleep(3000);
                 Log.d(TAG, "Thread name run: " + Thread.currentThread().getName() + ", " + name + " , 线程执行完成");
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
