@@ -37,6 +37,7 @@ import android.widget.Toast;
 
 import com.zzh.zlibs.R;
 import com.zzh.zlibs.base.BaseDataBindingActivity;
+import com.zzh.zlibs.camera.preview.BaseCameraActivity;
 import com.zzh.zlibs.utils.FileUtils;
 import com.zzh.zlibs.utils.PermissionManager;
 import com.zzh.zlibs.utils.ZUtils;
@@ -57,20 +58,14 @@ import java.util.Arrays;
  * @since 1.0
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class Camera21Activity extends BaseDataBindingActivity implements View.OnClickListener {
+public class Camera21Activity extends BaseCameraActivity {
 
     public static final String EXTRA_OUTPUT_FILE = "zzh_output_file";
-    private SurfaceView mSurfaceView;
-    private SurfaceHolder mHolder;
     private Handler childHandler;
     private String mCameraID;
     private ImageReader mImageReader;
     private CameraManager mCameraManager;
-    private CameraDevice mCameraDevice;
     private CameraCaptureSession mCameraCaptureSession;
-    private ImageView iv_preview_picture;
-    private ImageView iv_cancel;
-    private ImageView iv_confirm;
     /**
      * 传入的数据;
      */
@@ -101,6 +96,9 @@ public class Camera21Activity extends BaseDataBindingActivity implements View.On
         iv_preview_picture = findViewById(R.id.iv_preview_picture);
         iv_cancel = findViewById(R.id.iv_cancel);
         iv_confirm = findViewById(R.id.iv_confirm);
+
+        iv_cancel.setOnClickListener(this);
+        iv_confirm.setOnClickListener(this);
         findViewById(R.id.iv_take_picture).setOnClickListener(this);
 
         Intent intent = getIntent();
@@ -257,7 +255,8 @@ public class Camera21Activity extends BaseDataBindingActivity implements View.On
     /**
      * 拍照
      */
-    private void takePicture() {
+    @Override
+    protected void takePicture() {
         if (mCameraDevice == null) return;
         // 创建拍照需要的CaptureRequest.Builder
         final CaptureRequest.Builder captureRequestBuilder;
@@ -289,34 +288,5 @@ public class Camera21Activity extends BaseDataBindingActivity implements View.On
     @Override
     protected void handlerMessage(Message msg) {
 
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.iv_take_picture) {
-            takePicture();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        releaseImageViewResource(iv_preview_picture);
-        if (null != mCameraDevice) {
-            mCameraDevice.close();
-            mCameraDevice = null;
-        }
-        super.onDestroy();
-    }
-
-    public void releaseImageViewResource(ImageView imageView) {
-        if (imageView == null) return;
-        Drawable drawable = imageView.getDrawable();
-        if (drawable != null && drawable instanceof BitmapDrawable) {
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            Bitmap bitmap = bitmapDrawable.getBitmap();
-            if (bitmap != null && !bitmap.isRecycled()) {
-                bitmap.recycle();
-            }
-        }
     }
 }
