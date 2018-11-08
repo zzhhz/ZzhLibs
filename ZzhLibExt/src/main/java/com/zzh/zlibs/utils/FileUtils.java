@@ -1,6 +1,7 @@
 package com.zzh.zlibs.utils;
 
-import android.os.Environment;
+import android.sax.TextElementListener;
+import android.text.TextUtils;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -26,16 +27,24 @@ public class FileUtils {
      * @return 写入成功 true
      */
     public static boolean saveFile(byte[] data, String filePathName) {
+        if (data == null || TextUtils.isEmpty(filePathName)) {
+            return false;
+        }
+        return saveFile(data, new File(filePathName));
+    }
+
+    /**
+     * 文件操作
+     *
+     * @param data         字节
+     * @param filePathName 写入的文件
+     * @return 写入成功 true
+     */
+    public static boolean saveFile(byte[] data, File filePathName) {
         BufferedOutputStream bos = null;
         if (ZUtils.isMountedSDCard()) {
             try {
-                File file = new File(filePathName);
-                if (file.exists()) {
-                    return true;
-                } else {
-                    file.createNewFile();
-                }
-                bos = new BufferedOutputStream(new FileOutputStream(file));
+                bos = new BufferedOutputStream(new FileOutputStream(filePathName));
                 bos.write(data);
                 bos.flush();
                 return true;

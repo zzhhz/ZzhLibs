@@ -3,7 +3,12 @@ package com.zzh.zlibs.camera;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -27,6 +32,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.zzh.zlibs.R;
@@ -36,6 +42,7 @@ import com.zzh.zlibs.utils.PermissionManager;
 import com.zzh.zlibs.utils.ZUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -52,6 +59,7 @@ import java.util.Arrays;
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class Camera21Activity extends BaseDataBindingActivity implements View.OnClickListener {
 
+    public static final String EXTRA_OUTPUT_FILE = "zzh_output_file";
     private SurfaceView mSurfaceView;
     private SurfaceHolder mHolder;
     private Handler childHandler;
@@ -60,6 +68,14 @@ public class Camera21Activity extends BaseDataBindingActivity implements View.On
     private CameraManager mCameraManager;
     private CameraDevice mCameraDevice;
     private CameraCaptureSession mCameraCaptureSession;
+    private ImageView iv_preview_picture;
+    private ImageView iv_cancel;
+    private ImageView iv_confirm;
+    /**
+     * 传入的数据;
+     */
+
+    public String mOutputFile;
 
     /**
      * 是照片竖着显示
@@ -82,7 +98,17 @@ public class Camera21Activity extends BaseDataBindingActivity implements View.On
 
     private void initView() {
         mSurfaceView = findViewById(R.id.sv_camera);
+        iv_preview_picture = findViewById(R.id.iv_preview_picture);
+        iv_cancel = findViewById(R.id.iv_cancel);
+        iv_confirm = findViewById(R.id.iv_confirm);
         findViewById(R.id.iv_take_picture).setOnClickListener(this);
+
+        Intent intent = getIntent();
+        if (intent.hasExtra(EXTRA_OUTPUT_FILE)) {
+            mOutputFile = intent.getStringExtra(EXTRA_OUTPUT_FILE);
+        }
+
+
         mHolder = mSurfaceView.getHolder();
         mHolder.setKeepScreenOn(true);
         mHolder.addCallback(new SurfaceHolder.Callback() {
@@ -124,7 +150,31 @@ public class Camera21Activity extends BaseDataBindingActivity implements View.On
                 ByteBuffer buffer = image.getPlanes()[0].getBuffer();
                 byte[] images = new byte[buffer.remaining()];
                 buffer.get(images);
-                FileUtils.saveFile(images, ZUtils.getSDCardDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "zzh_" + System.currentTimeMillis() + ".jpg");
+                String outputFile = mOutputFile;
+                File output = null;
+                if (TextUtils.isEmpty(outputFile)) {
+                    outputFile = ZUtils.getSDCardDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "zzh_" + System.currentTimeMillis() + ".jpg";
+                    output = new File(outputFile);
+                } else {
+                    output = new File(outputFile);
+                    if (output.exists()) {
+                        output.deleteOnExit();
+                    } else {
+                        try {
+                            output.createNewFile();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                Bitmap bitmap = BitmapFactory.decodeByteArray(images, 0, images.length);
+                iv_preview_picture.setImageBitmap(bitmap);
+                bitmap = null;
+                iv_cancel.setVisibility(View.VISIBLE);
+                iv_confirm.setVisibility(View.VISIBLE);
+                iv_preview_picture.setVisibility(View.VISIBLE);
+
+                FileUtils.saveFile(images, output);
                 image.close();
             }
         }, mHandler);
@@ -245,6 +295,28 @@ public class Camera21Activity extends BaseDataBindingActivity implements View.On
     public void onClick(View v) {
         if (v.getId() == R.id.iv_take_picture) {
             takePicture();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        releaseImageViewResource(iv_preview_picture);
+        if (null != mCameraDevice) {
+            mCameraDevice.close();
+            mCameraDevice = null;
+        }
+        super.onDestroy();
+    }
+
+    public void releaseImageViewResource(ImageView imageView) {
+        if (imageView == null) return;
+        Drawable drawable = imageView.getDrawable();
+        if (drawable != null && drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            Bitmap bitmap = bitmapDrawable.getBitmap();
+            if (bitmap != null && !bitmap.isRecycled()) {
+                bitmap.recycle();
+            }
         }
     }
 }

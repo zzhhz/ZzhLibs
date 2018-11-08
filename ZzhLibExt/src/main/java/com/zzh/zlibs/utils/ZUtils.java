@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -17,6 +18,8 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+
+import com.zzh.zlibs.camera.Camera21Activity;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +56,7 @@ import java.util.regex.Pattern;
  * @Email: zzh_hz@126.com
  * @QQ: 1299234582
  * @Author: zzh
- * @Description: 对一些工具的封装<br                                                                                                                               />
+ * @Description: 对一些工具的封装<br                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               />
  * 1.单位转换<br/>
  * 2.日期格式化<br/>
  * 3.网络判断<br/>
@@ -585,5 +588,23 @@ public class ZUtils {
         GPRS,//移动网络
         NONETWORK,//无网络连接
         NONE//未知网络
+    }
+
+    public static final int REQUEST_OPEN_CAMERA = 5000;
+
+    /**
+     * 打开程序内部相机
+     *
+     * @param outputFile 输入的文件路径
+     */
+    public static void openCamera(Context ctx, String outputFile) {
+        Intent intent = new Intent(ctx, Camera21Activity.class);
+        intent.putExtra(Camera21Activity.EXTRA_OUTPUT_FILE, outputFile);
+        if (ctx instanceof Activity) {
+            ((Activity) ctx).startActivityForResult(intent, REQUEST_OPEN_CAMERA);
+        } else {
+            ctx.startActivity(intent);
+        }
+
     }
 }
