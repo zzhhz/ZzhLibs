@@ -30,9 +30,21 @@ public class ZThreadManager {
      * 存活时间
      */
     private long sKeepAliveTime = 1;
+    /**
+     * 单位
+     */
     private TimeUnit sUnit = TimeUnit.MINUTES;
+    /**
+     * 线程调度模式
+     */
     private boolean sFifo = true;
+    /**
+     * 线程池
+     */
     private ThreadPoolExecutor mExecutor;
+    /**
+     * 线程池管理工具
+     */
     private static ZThreadManager mInstance;
 
     public static ZThreadManager getInstance(Builder builder) {
@@ -70,13 +82,9 @@ public class ZThreadManager {
             this.sCorePoolSize = builder.getCorePoolSize();
             this.sMaxPoolSize = builder.getMaxPoolSize();
         }
-
-
         this.sKeepAliveTime = builder.getKeepAliveTime();
         this.sUnit = builder.getUnit();
         this.sFifo = builder.isFifo();
-
-
         mExecutor = initThreadPool();
     }
 
@@ -88,6 +96,9 @@ public class ZThreadManager {
                 new ThreadPoolExecutor.AbortPolicy());
     }
 
+    /**
+     * 构造者模式
+     */
     public static class Builder {
 
         private int sCorePoolSize;
@@ -161,6 +172,12 @@ public class ZThreadManager {
         }
     }
 
+    /**
+     * 移除执行任务
+     *
+     * @param runnable
+     * @return
+     */
     public boolean remove(Runnable runnable) {
         if (runnable == null) {
             return true;
@@ -177,6 +194,4 @@ public class ZThreadManager {
         BlockingQueue<Runnable> queue = mExecutor.getQueue();
         queue.clear();
     }
-
-
 }

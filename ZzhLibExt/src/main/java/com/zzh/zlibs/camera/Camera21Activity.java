@@ -59,8 +59,6 @@ import java.util.Arrays;
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class Camera21Activity extends BaseCameraActivity {
-
-    public static final String EXTRA_OUTPUT_FILE = "zzh_output_file";
     private Handler childHandler;
     private String mCameraID;
     private ImageReader mImageReader;
@@ -69,44 +67,19 @@ public class Camera21Activity extends BaseCameraActivity {
     /**
      * 传入的数据;
      */
-
     public String mOutputFile;
-
-    /**
-     * 是照片竖着显示
-     */
-    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
-
-    static {
-        ORIENTATIONS.append(Surface.ROTATION_0, 90);
-        ORIENTATIONS.append(Surface.ROTATION_90, 0);
-        ORIENTATIONS.append(Surface.ROTATION_180, 270);
-        ORIENTATIONS.append(Surface.ROTATION_270, 180);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.zzh_camera);
         initView();
     }
 
     private void initView() {
-        mSurfaceView = findViewById(R.id.sv_camera);
-        iv_preview_picture = findViewById(R.id.iv_preview_picture);
-        iv_cancel = findViewById(R.id.iv_cancel);
-        iv_confirm = findViewById(R.id.iv_confirm);
-
-        iv_cancel.setOnClickListener(this);
-        iv_confirm.setOnClickListener(this);
-        findViewById(R.id.iv_take_picture).setOnClickListener(this);
-
         Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_OUTPUT_FILE)) {
             mOutputFile = intent.getStringExtra(EXTRA_OUTPUT_FILE);
         }
-
-
         mHolder = mSurfaceView.getHolder();
         mHolder.setKeepScreenOn(true);
         mHolder.addCallback(new SurfaceHolder.Callback() {
@@ -148,31 +121,7 @@ public class Camera21Activity extends BaseCameraActivity {
                 ByteBuffer buffer = image.getPlanes()[0].getBuffer();
                 byte[] images = new byte[buffer.remaining()];
                 buffer.get(images);
-                String outputFile = mOutputFile;
-                File output = null;
-                if (TextUtils.isEmpty(outputFile)) {
-                    outputFile = ZUtils.getSDCardDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "zzh_" + System.currentTimeMillis() + ".jpg";
-                    output = new File(outputFile);
-                } else {
-                    output = new File(outputFile);
-                    if (output.exists()) {
-                        output.deleteOnExit();
-                    } else {
-                        try {
-                            output.createNewFile();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                Bitmap bitmap = BitmapFactory.decodeByteArray(images, 0, images.length);
-                iv_preview_picture.setImageBitmap(bitmap);
-                bitmap = null;
-                iv_cancel.setVisibility(View.VISIBLE);
-                iv_confirm.setVisibility(View.VISIBLE);
-                iv_preview_picture.setVisibility(View.VISIBLE);
-
-                FileUtils.saveFile(images, output);
+                savePicture(images);
                 image.close();
             }
         }, mHandler);
@@ -252,6 +201,12 @@ public class Camera21Activity extends BaseCameraActivity {
         }
     }
 
+    @Override
+    protected void takePictureCancel() {
+        releaseImageViewResource(iv_preview_picture);
+        iv_preview_picture.setVisibility(View.GONE);
+    }
+
     /**
      * 拍照
      */
@@ -288,5 +243,15 @@ public class Camera21Activity extends BaseCameraActivity {
     @Override
     protected void handlerMessage(Message msg) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        releaseImageViewResource(iv_preview_picture);
+        if (null != mCameraDevice) {
+            mCameraDevice.close();
+            mCameraDevice = null;
+        }
+        super.onDestroy();
     }
 }

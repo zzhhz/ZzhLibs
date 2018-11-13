@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.zzh.zlibs.camera.Camera21Activity;
 import com.zzh.zlibs.utils.PermissionManager;
+import com.zzh.zlibs.utils.ZUtils;
 import com.zzh.zlibs.utils.thread.ZThreadManager;
 
 import java.util.Arrays;
@@ -107,7 +108,11 @@ public class MainActivity extends BaseGitActivity {
     }
 
     public void onClickTakePicture(View v) {
-        Intent in = new Intent(this, Camera21Activity.class);
-        startActivity(in);
+        ZUtils.openCamera(mContext, null);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult requestCode: " + requestCode + ", resultCode: " + resultCode + ", intent: " + data);
     }
 }
