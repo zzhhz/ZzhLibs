@@ -2,25 +2,16 @@ package com.zzh.zlibs.camera;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
-import android.hardware.camera2.CameraAccessException;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.View;
 
 import com.zzh.zlibs.camera.preview.BaseCameraActivity;
-import com.zzh.zlibs.utils.FileUtils;
-import com.zzh.zlibs.utils.ZUtils;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -67,6 +58,7 @@ public class CameraActivity extends BaseCameraActivity implements SurfaceHolder.
             if (cameras < 1) {
                 throw new ExceptionInInitializerError("-------初始化相机失败，获取不到相机数量------");
             }
+            faceCamera = Camera.CameraInfo.CAMERA_FACING_BACK;
             openCamera();
             try {
                 mCamera.setPreviewDisplay(mHolder);
@@ -89,9 +81,9 @@ public class CameraActivity extends BaseCameraActivity implements SurfaceHolder.
      */
     private void openCamera() {
         try {
-            mCamera = Camera.open(0);
+            mCamera = Camera.open(faceCamera);
             android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
-            android.hardware.Camera.getCameraInfo(0, info);
+            android.hardware.Camera.getCameraInfo(faceCamera, info);
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
 
             int degrees = 0;
@@ -155,6 +147,25 @@ public class CameraActivity extends BaseCameraActivity implements SurfaceHolder.
                 }
             });
         }
+    }
+
+    @Override
+    protected void changeCamera() {
+        mCamera.stopPreview();
+        mCamera.release();
+        mCamera = null;
+        if (faceCamera == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            faceCamera = Camera.CameraInfo.CAMERA_FACING_BACK;
+        } else {
+            faceCamera = Camera.CameraInfo.CAMERA_FACING_FRONT;
+        }
+        openCamera();
+        try {
+            mCamera.setPreviewDisplay(mHolder);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mCamera.startPreview();
     }
 
     @Override

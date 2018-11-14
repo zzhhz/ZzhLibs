@@ -9,6 +9,15 @@
         android:layout_height="match_parent" />
 
     <ImageView
+        android:id="@+id/iv_change"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="right"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_change" />
+
+    <ImageView
         android:id="@+id/iv_take_picture"
         android:layout_width="64dp"
         android:layout_height="64dp"
@@ -29,9 +38,9 @@
         android:layout_marginLeft="25dp"
         android:layout_marginBottom="15dp"
         android:padding="5dp"
-        android:visibility="gone"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_delete" />
+        android:src="@drawable/ic_delete"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/iv_confirm"
@@ -41,7 +50,7 @@
         android:layout_marginRight="25dp"
         android:layout_marginBottom="15dp"
         android:padding="5dp"
-        android:visibility="gone"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_confirm" />
+        android:src="@drawable/ic_confirm"
+        android:visibility="gone" />
 </FrameLayout>

@@ -1,8 +1,10 @@
 package com.zzh.zlibs.camera.preview;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.camera2.CameraDevice;
@@ -41,9 +43,21 @@ public class BaseCameraActivity extends BaseDataBindingActivity implements View.
     protected SurfaceView mSurfaceView;
     protected SurfaceHolder mHolder;
     protected CameraDevice mCameraDevice;
+
     protected ImageView iv_preview_picture;
+    /**
+     * 取消照片
+     */
     protected ImageView iv_cancel;
+    /**
+     * 确定选择拍的照片
+     */
     protected ImageView iv_confirm;
+
+    /**
+     * 前后镜头切换
+     */
+    protected ImageView iv_change;
     protected String DEFAULT_PATH = ZUtils.getSDCardDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "zzh_";
     /**
      * 传入的数据;
@@ -55,6 +69,8 @@ public class BaseCameraActivity extends BaseDataBindingActivity implements View.
      * 是照片竖着显示
      */
     protected static final SparseIntArray ORIENTATIONS = new SparseIntArray();
+
+    protected int faceCamera = 0;
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -71,12 +87,14 @@ public class BaseCameraActivity extends BaseDataBindingActivity implements View.
     }
 
     private void initView() {
+        iv_change = findViewById(R.id.iv_change);
         mSurfaceView = findViewById(R.id.sv_camera);
         iv_preview_picture = findViewById(R.id.iv_preview_picture);
         iv_cancel = findViewById(R.id.iv_cancel);
         iv_confirm = findViewById(R.id.iv_confirm);
         iv_cancel.setOnClickListener(this);
         iv_confirm.setOnClickListener(this);
+        iv_change.setOnClickListener(this);
         findViewById(R.id.iv_take_picture).setOnClickListener(this);
         Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_OUTPUT_FILE)) {
@@ -103,7 +121,20 @@ public class BaseCameraActivity extends BaseDataBindingActivity implements View.
             takePictureCancel();
         } else if (v.getId() == R.id.iv_confirm) {
             takePictureOkFinish();
+        } else if (v.getId() == R.id.iv_change) {
+            changeCamera();
         }
+    }
+
+    public boolean checkCamera() {
+        return getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+    }
+
+    /**
+     * 切换摄像头
+     */
+    protected void changeCamera() {
+
     }
 
     /**
@@ -113,6 +144,7 @@ public class BaseCameraActivity extends BaseDataBindingActivity implements View.
         Intent intent = new Intent();
         intent.putExtra(EXTRA_OUTPUT_FILE, mOutputFile);
         setResult(RESULT_OK, intent);
+        finish();
     }
 
     /**
@@ -147,6 +179,15 @@ public class BaseCameraActivity extends BaseDataBindingActivity implements View.
      * @param images
      */
     public void savePicture(byte[] images) {
+        savePicture(images, false);
+    }
+
+    /**
+     * 保存图片
+     *
+     * @param images
+     */
+    public void savePicture(byte[] images, boolean isDegrees) {
         String outputFile = mOutputFile;
         File output = null;
         if (TextUtils.isEmpty(outputFile)) {
@@ -166,14 +207,34 @@ public class BaseCameraActivity extends BaseDataBindingActivity implements View.
             }
         }
         mOutputFile = outputFile;
+        FileUtils.saveFile(images, output);
         Log.d(TAG, "onPictureTaken: 保存图片成功: " + outputFile);
         Bitmap bitmap = BitmapFactory.decodeByteArray(images, 0, images.length);
+        if (isDegrees) {
+            bitmap = rotateBitmap(bitmap, 90);
+        }
         iv_preview_picture.setImageBitmap(bitmap);
-        bitmap.recycle();
-        bitmap = null;
         iv_cancel.setVisibility(View.VISIBLE);
         iv_confirm.setVisibility(View.VISIBLE);
         iv_preview_picture.setVisibility(View.VISIBLE);
-        FileUtils.saveFile(images, output);
+
+    }
+
+    /**
+     * @param bitmap
+     * @param degrees
+     * @return
+     */
+    public static Bitmap rotateBitmap(Bitmap bitmap, int degrees) {
+        if (degrees == 0 || null == bitmap) {
+            return bitmap;
+        }
+        Matrix matrix = new Matrix();
+        matrix.setRotate(degrees, bitmap.getWidth() / 2, bitmap.getHeight() / 2);
+        Bitmap bmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        if (null != bitmap) {
+            bitmap.recycle();
+        }
+        return bmp;
     }
 }

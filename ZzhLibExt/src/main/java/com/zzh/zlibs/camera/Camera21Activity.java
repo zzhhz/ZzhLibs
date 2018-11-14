@@ -85,8 +85,8 @@ public class Camera21Activity extends BaseCameraActivity {
         mHolder.addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-
                 try {
+                    faceCamera = CameraCharacteristics.LENS_FACING_FRONT;
                     initCamera();
                 } catch (CameraAccessException e) {
                     e.printStackTrace();
@@ -111,8 +111,8 @@ public class Camera21Activity extends BaseCameraActivity {
         HandlerThread handlerThread = new HandlerThread("Camera2");
         handlerThread.start();
         childHandler = new Handler(handlerThread.getLooper());
-        mCameraID = String.valueOf(CameraCharacteristics.LENS_FACING_FRONT);
-        mImageReader = ImageReader.newInstance(1920, 1080, ImageFormat.JPEG, 1);
+        mCameraID = String.valueOf(faceCamera);
+        mImageReader = ImageReader.newInstance(ZUtils.getDisplayHeight(this), ZUtils.getDisplayWidth(this), ImageFormat.JPEG, 1);
         mCameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
         mImageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
             @Override
@@ -121,7 +121,7 @@ public class Camera21Activity extends BaseCameraActivity {
                 ByteBuffer buffer = image.getPlanes()[0].getBuffer();
                 byte[] images = new byte[buffer.remaining()];
                 buffer.get(images);
-                savePicture(images);
+                savePicture(images, true);
                 image.close();
             }
         }, mHandler);
@@ -160,6 +160,38 @@ public class Camera21Activity extends BaseCameraActivity {
 
         }
     };
+
+    @Override
+    protected void changeCamera() {
+        if (String.valueOf(faceCamera) == mCameraDevice.getId()) {
+            faceCamera = CameraCharacteristics.LENS_FACING_BACK;
+        } else {
+            faceCamera = CameraCharacteristics.LENS_FACING_FRONT;
+        }
+        closeCamera();
+        openCamera();
+    }
+
+    @SuppressLint("MissingPermission")
+    private void openCamera() {
+        try {
+            initCamera();
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void closeCamera() {
+        if (mCameraDevice != null) {
+            mCameraDevice.close();
+            mCameraDevice = null;
+        }
+        if (mCameraCaptureSession != null) {
+            mCameraCaptureSession.close();
+            mCameraCaptureSession = null;
+        }
+    }
+
 
     /**
      * 打开预览
