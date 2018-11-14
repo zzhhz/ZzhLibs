@@ -163,7 +163,7 @@ public class Camera21Activity extends BaseCameraActivity {
 
     @Override
     protected void changeCamera() {
-        if (String.valueOf(faceCamera) == mCameraDevice.getId()) {
+        if (faceCamera == CameraCharacteristics.LENS_FACING_FRONT) {
             faceCamera = CameraCharacteristics.LENS_FACING_BACK;
         } else {
             faceCamera = CameraCharacteristics.LENS_FACING_FRONT;
