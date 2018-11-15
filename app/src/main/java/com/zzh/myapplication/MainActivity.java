@@ -6,13 +6,15 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
-import com.zzh.zlibs.camera.Camera21Activity;
 import com.zzh.zlibs.utils.PermissionManager;
 import com.zzh.zlibs.utils.ZUtils;
 import com.zzh.zlibs.utils.thread.ZThreadManager;
 
 import java.util.Arrays;
+
+import com.zzh.main.R;
 
 public class MainActivity extends BaseGitActivity {
     @Override
@@ -20,20 +22,20 @@ public class MainActivity extends BaseGitActivity {
         return R.layout.activity_main;
     }
 
+    @Override
+    protected void initView() {
+
+        TextView tvw = (TextView) findViewById(R.id.tv_d_w);
+        tvw.setText("屏幕宽度：" + String.valueOf(ZUtils.getDisplayWidth(this)) + "\n高度： " + String.valueOf(ZUtils.getDisplayHeight(this)));
+
+
+    }
+
     public void onClickView(View v) {
         checkPermissions();
     }
 
     public void onClickCheckPermission(View v) {
-        /*PermissionManager.checkAndRequestMorePermissions(this, new String[]{
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.CAMERA}, 1000,
-                new PermissionManager.PermissionRequestSuccessCallBack() {
-                    @Override
-                    public void onHasPermission() {
-                        Log.d(TAG, "onHasPermission: 已经授予了权限");
-                    }
-                });*/
         PermissionManager.checkAndRequestMorePermissions(this, new String[]{
                         Manifest.permission.CAMERA,
                         Manifest.permission.READ_PHONE_STATE,

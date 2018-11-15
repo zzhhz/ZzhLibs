@@ -12,9 +12,19 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        //正式版签名
+        releaseConfigs {
+            storeFile file("zzh.jks")
+            storePassword "zzheng4419"
+            keyAlias "zzh"
+            keyPassword "zzheng4419"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.releaseConfigs
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

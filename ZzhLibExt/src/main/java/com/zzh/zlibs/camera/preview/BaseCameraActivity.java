@@ -8,6 +8,7 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.camera2.CameraDevice;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Message;
@@ -81,6 +82,7 @@ public class BaseCameraActivity extends BaseDataBindingActivity implements View.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Translucent_System_Bar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.zzh_camera);
         initView();
@@ -211,7 +213,7 @@ public class BaseCameraActivity extends BaseDataBindingActivity implements View.
         Log.d(TAG, "onPictureTaken: 保存图片成功: " + outputFile);
         Bitmap bitmap = BitmapFactory.decodeByteArray(images, 0, images.length);
         if (isDegrees) {
-            bitmap = rotateBitmap(bitmap, 90);
+            bitmap = rotateBitmap(bitmap, readPictureDegree(mOutputFile));
         }
         iv_preview_picture.setImageBitmap(bitmap);
         iv_cancel.setVisibility(View.VISIBLE);
@@ -236,5 +238,34 @@ public class BaseCameraActivity extends BaseDataBindingActivity implements View.
             bitmap.recycle();
         }
         return bmp;
+    }
+
+    /**
+     * 图片的旋转角度
+     *
+     * @param path
+     * @return
+     */
+    private int readPictureDegree(String path) {
+        int degree = 0;
+        try {
+            ExifInterface face = new ExifInterface(path);
+            int ori = face.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+            switch (ori) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return degree;
     }
 }

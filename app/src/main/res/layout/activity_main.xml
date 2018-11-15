@@ -45,4 +45,12 @@
         android:onClick="onClickTakePicture"
         android:text="Button" />
 
+    <TextView
+        android:id="@+id/tv_d_w"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/color_primary_dark"
+        android:textSize="30sp" />
+
 </LinearLayout>
