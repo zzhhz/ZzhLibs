@@ -13,10 +13,10 @@ import java.util.concurrent.TimeUnit;
  * @email: zzh_hz@126.com
  * @QQ: 1299234582
  * @author: zzh
- * @description: ZzhLibs 线程管理, 单例模式，先进先出
+ * @description: ZzhLibs 线程管理, 单例模式, 后进先出
  * @since 1.0
  */
-public class ZThreadManager {
+public class ZThreadLIFOManager {
 
     /**
      * 线程核心数量
@@ -37,7 +37,7 @@ public class ZThreadManager {
     /**
      * 线程调度模式
      */
-    private boolean sFifo = true;
+    private boolean sFifo = false;
     /**
      * 线程池
      */
@@ -45,24 +45,24 @@ public class ZThreadManager {
     /**
      * 线程池管理工具
      */
-    private static ZThreadManager mInstance;
+    private static ZThreadLIFOManager mInstance;
 
-    public static ZThreadManager getInstance(Builder builder) {
+    public static ZThreadLIFOManager getInstance(Builder builder) {
         if (mInstance == null) {
-            synchronized (ZThreadManager.class) {
+            synchronized (ZThreadLIFOManager.class) {
                 if (mInstance == null) {
-                    mInstance = new ZThreadManager(builder);
+                    mInstance = new ZThreadLIFOManager(builder);
                 }
             }
         }
         return mInstance;
     }
 
-    public static ZThreadManager getInstance() {
+    public static ZThreadLIFOManager getInstance() {
         if (mInstance == null) {
-            synchronized (ZThreadManager.class) {
+            synchronized (ZThreadLIFOManager.class) {
                 if (mInstance == null) {
-                    mInstance = new ZThreadManager(new Builder());
+                    mInstance = new ZThreadLIFOManager(new Builder());
                 }
             }
         }
@@ -70,7 +70,7 @@ public class ZThreadManager {
     }
 
 
-    private ZThreadManager(Builder builder) {
+    private ZThreadLIFOManager(Builder builder) {
         /**
          * 初始化数据
          */
@@ -105,7 +105,7 @@ public class ZThreadManager {
         private int sMaxPoolSize;
         private long sKeepAliveTime = 1;
         private TimeUnit sUnit = TimeUnit.MINUTES;
-        private boolean sFifo = true;
+        private boolean sFifo = false;
 
         public Builder setCorePoolSize(int sCorePoolSize) {
             this.sCorePoolSize = sCorePoolSize;
@@ -152,7 +152,7 @@ public class ZThreadManager {
             return sFifo;
         }
 
-        public ZThreadManager build() {
+        public ZThreadLIFOManager build() {
 
             return getInstance(this);
         }
