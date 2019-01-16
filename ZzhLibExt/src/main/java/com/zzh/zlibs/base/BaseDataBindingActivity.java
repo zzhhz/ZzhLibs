@@ -31,6 +31,7 @@ import com.zzh.zlibs.R;
  * @author: zzh
  * @description: 需要自己设置layout的Activity。不支持页面的滑动退出。
  */
+@Deprecated
 public abstract class BaseDataBindingActivity extends AppCompatActivity {
     protected static String TAG;
     protected Context mContext;
@@ -50,26 +51,28 @@ public abstract class BaseDataBindingActivity extends AppCompatActivity {
             mHandler = new BaseHandler();
     }
 
-    protected void toolbars(int toolbarId, int resId, String title, Toolbar.OnClickListener clickListener){
+    protected void toolbars(int toolbarId, int resId, String title, Toolbar.OnClickListener clickListener) {
         setToolbar(toolbarId);
-        toolbars(title,resId,clickListener);
-    }
-    protected void toolbars(Toolbar toolbar, int resId, String title, Toolbar.OnClickListener clickListener){
-        setToolbar(toolbar);
-        toolbars(title,resId,clickListener);
+        toolbars(title, resId, clickListener);
     }
 
-    protected void setToolbarAndTitle(int toolbarId, int titleId){
+    protected void toolbars(Toolbar toolbar, int resId, String title, Toolbar.OnClickListener clickListener) {
+        setToolbar(toolbar);
+        toolbars(title, resId, clickListener);
+    }
+
+    protected void setToolbarAndTitle(int toolbarId, int titleId) {
         setToolbar(toolbarId);
         setToolBarTitle(titleId);
     }
+
     public void setToolBarTitle(int titleId) {
         this.mTitle = mToolbar.findViewById(titleId);
     }
 
 
     //设置Toolbar
-    protected void toolbars(String title){
+    protected void toolbars(String title) {
         toolbars(title, null);
     }
 
@@ -81,15 +84,15 @@ public abstract class BaseDataBindingActivity extends AppCompatActivity {
         this.mToolbar = mToolbar;
     }
 
-    public Toolbar getToolbar(){
+    public Toolbar getToolbar() {
         return mToolbar;
     }
 
-    protected void toolbars(String title, Toolbar.OnClickListener clickListener){
+    protected void toolbars(String title, Toolbar.OnClickListener clickListener) {
         toolbars(title, -1, clickListener);
     }
 
-    protected void toolbars(String title, int ic_back,Toolbar.OnClickListener clickListener) {
+    protected void toolbars(String title, int ic_back, Toolbar.OnClickListener clickListener) {
         try {
             mToolbar = getToolbar();
             if (mToolbar == null) {
@@ -186,10 +189,10 @@ public abstract class BaseDataBindingActivity extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         };
         boolean result = true;//默认已经都授权了
-        outer :
-        for (String per:permission){
+        outer:
+        for (String per : permission) {
             result = verifyGrantPermission(per);
-            if (!result){
+            if (!result) {
                 break outer;
             }
         }
@@ -201,9 +204,9 @@ public abstract class BaseDataBindingActivity extends AppCompatActivity {
     }
 
     //判断是否授予了权限
-    protected boolean verifyGrantPermission(String permission){
+    protected boolean verifyGrantPermission(String permission) {
         boolean result;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             result = (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED);
         } else {
             result = PermissionChecker.checkSelfPermission(this, permission)
@@ -228,16 +231,17 @@ public abstract class BaseDataBindingActivity extends AppCompatActivity {
 
     /**
      * 通知申请到得权限
+     *
      * @param code 自定义的Request Code 和自己申请权限时是一致的
      * @param flag true 申请权限成功，false没有申请到权限
      */
-    protected void notifyPermission(int code, boolean flag){
+    protected void notifyPermission(int code, boolean flag) {
 
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (verifyPermissions(grantResults)){
+        if (verifyPermissions(grantResults)) {
             notifyPermission(requestCode, true);
         } else {
             notifyPermission(requestCode, false);

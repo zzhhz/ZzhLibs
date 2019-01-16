@@ -24,7 +24,7 @@ public class SwipeBackActivityHelper {
         mActivity.getWindow().getDecorView().setBackgroundDrawable(null);
         mSwipeBackLayout = (SwipeBackLayout) LayoutInflater.from(mActivity).inflate(
                 com.zzh.zlibs.R.layout.swipeback_layout, null);
-        mSwipeBackLayout.addSwipeListener(new SwipeBackLayout.SwipeListener() {
+        /*mSwipeBackLayout.addSwipeListener(new SwipeBackLayout.SwipeListener() {
             @Override
             public void onScrollStateChange(int state, float scrollPercent) {
             }
@@ -38,7 +38,7 @@ public class SwipeBackActivityHelper {
             public void onScrollOverThreshold() {
 
             }
-        });
+        });*/
     }
 
     public void onPostCreate() {

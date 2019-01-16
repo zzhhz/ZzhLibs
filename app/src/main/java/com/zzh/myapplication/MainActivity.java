@@ -27,7 +27,13 @@ public class MainActivity extends BaseGitActivity {
 
         TextView tvw = (TextView) findViewById(R.id.tv_d_w);
         tvw.setText("屏幕宽度：" + String.valueOf(ZUtils.getDisplayWidth(this)) + "\n高度： " + String.valueOf(ZUtils.getDisplayHeight(this)));
-
+        tvw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, Main2Activity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 

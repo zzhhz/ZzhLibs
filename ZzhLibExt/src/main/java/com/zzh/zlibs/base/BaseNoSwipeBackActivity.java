@@ -13,6 +13,7 @@ import android.os.Bundle;
  * 给控件设置监听事件<br />
  * 不支持滑动返回<br />
  */
+@Deprecated
 public abstract class BaseNoSwipeBackActivity extends BaseActivity {
 
     @Override
