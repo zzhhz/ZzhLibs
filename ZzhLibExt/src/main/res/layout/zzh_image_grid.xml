@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#EDEDED">
+
+        <ImageView
+            android:id="@+id/zh_back"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:src="@drawable/ic_back" />
+
+        <View
+            android:layout_width="2px"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/zh_back"
+            android:background="#000000" />
+
+        <TextView
+            android:id="@+id/zh_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/zh_back"
+            android:gravity="center"
+            android:text="图片"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+        <FrameLayout
+            android:id="@+id/fl_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:background="#0684FF"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp">
+
+            <TextView
+                android:id="@+id/zh_select_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="完成(0/9)"
+                android:textColor="#fff" />
+
+        </FrameLayout>
+
+    </RelativeLayout>
+
+    <GridView
+        android:id="@+id/zh_grid"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:numColumns="4"></GridView>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#343434">
+
+        <TextView
+            android:id="@+id/zh_folder_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:text="全部图片"
+            android:textColor="#f0f0f0"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/zh_preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:text="预览"
+            android:textColor="#f0f0f0"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+</LinearLayout>
