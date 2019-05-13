@@ -1,5 +1,6 @@
 package com.zzh.zlibs.image;
 
+import android.content.ContentResolver;
 import android.os.Message;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -37,6 +38,8 @@ public class ImageGridActivity extends BaseActivity {
     @Override
     protected void initView() {
         setSwipeBackEnable(false);
+
+
 
 
     }
