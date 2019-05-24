@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.zzh.zlibs.image.ScanImageRunnable;
 import com.zzh.zlibs.utils.PermissionManager;
 import com.zzh.zlibs.utils.ZUtils;
+import com.zzh.zlibs.utils.thread.ZThreadLIFOManager;
 import com.zzh.zlibs.utils.thread.ZThreadManager;
 
 import java.util.Arrays;
@@ -32,6 +34,12 @@ public class MainActivity extends BaseGitActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, Main2Activity.class);
                 startActivity(intent);
+            }
+        });
+        findViewById(R.id.btn_image).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ZThreadLIFOManager.getInstance().execute(new ScanImageRunnable(MainActivity.this, mHandler));
             }
         });
 

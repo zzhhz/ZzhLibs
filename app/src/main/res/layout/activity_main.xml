@@ -44,6 +44,12 @@
         android:layout_height="wrap_content"
         android:onClick="onClickTakePicture"
         android:text="Button" />
+    <Button
+        android:id="@+id/btn_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClickTakePicture"
+        android:text="Button" />
 
     <TextView
         android:id="@+id/tv_d_w"

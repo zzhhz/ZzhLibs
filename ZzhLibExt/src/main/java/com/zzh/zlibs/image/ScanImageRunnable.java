@@ -3,10 +3,11 @@ package com.zzh.zlibs.image;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
+import android.util.Log;
 
-import java.util.Objects;
-import java.util.logging.Handler;
 
 /**
  * Created by Administrator.
@@ -36,11 +37,31 @@ public class ScanImageRunnable implements Runnable {
     @Override
     public void run() {
         ContentResolver resolver = ctx.getContentResolver();
-        Cursor query = resolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media.MIME_TYPE + "=? or "
-                        + MediaStore.Images.Media.MIME_TYPE + "=?",
-                new String[]{"image/jpeg", "image/png", "image/jpg"}, MediaStore.Images.Media.DATE_MODIFIED);
+        Uri files = MediaStore.Files.getContentUri("external");
+        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        Log.e("--------", "run: " + uri.toString());
+        Cursor query = resolver.query(files, new String[]{"_id", "_data", "_display_name", "title", "mime_type", "width", "height", "mini_thumb_data"},
+                " mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ?",
+                new String[]{"image/jpeg", "image/png", "image/jpg", "video/mp4", "video/avi", "video/rm"}, MediaStore.Images.Media.DATE_MODIFIED);
         if (query != null) {
+            int indexId = query.getColumnIndex("_id");
+            int indexData = query.getColumnIndex("_data");
+            int indexDN = query.getColumnIndex("_display_name");
+            int indexTitle = query.getColumnIndex("title");
+            int indexMimeType = query.getColumnIndex("mime_type");
+            int indexWidth = query.getColumnIndex("width");
+            int indexHeight = query.getColumnIndex("height");
 
+            while (query.moveToNext()) {
+                int id = query.getInt(indexId);
+                String data = query.getString(indexData);
+                String display_name = query.getString(indexDN);
+                String title = query.getString(indexTitle);
+                String mime = query.getString(indexMimeType);
+                int width = query.getInt(indexWidth);
+                int height = query.getInt(indexHeight);
+                Log.e("--------", "run: " + id + ", " + data + ", " + display_name + ", " + mime + ", " + title + ", " + width + ", " + height);
+            }
 
 
         }
