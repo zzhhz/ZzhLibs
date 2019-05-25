@@ -38,8 +38,7 @@ public class ImageGridActivity extends BaseActivity {
     @Override
     protected void initView() {
         setSwipeBackEnable(false);
-
-
+        zh_grid = (GridView) findViewById(R.id.zh_grid);
 
 
     }

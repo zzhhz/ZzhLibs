@@ -19,8 +19,27 @@ public class FileItem {
     private long date_modified;
     private int width;
     private int height;
-    private int fileSize;
+    private long fileSize;
     private String mime_type;
+    private String thumb;
+    private String parent;
+
+
+    public String getParent() {
+        return parent;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
+
+    public String getThumb() {
+        return thumb;
+    }
+
+    public void setThumb(String thumb) {
+        this.thumb = thumb;
+    }
 
     public String getMime_type() {
         return mime_type;
@@ -94,11 +113,11 @@ public class FileItem {
         this.height = height;
     }
 
-    public int getFileSize() {
+    public long getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(int fileSize) {
+    public void setFileSize(long fileSize) {
         this.fileSize = fileSize;
     }
 }
