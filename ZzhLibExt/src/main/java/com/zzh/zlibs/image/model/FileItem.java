@@ -1,5 +1,7 @@
 package com.zzh.zlibs.image.model;
 
+import java.util.Objects;
+
 /**
  * Created by Administrator.
  *
@@ -119,5 +121,20 @@ public class FileItem {
 
     public void setFileSize(long fileSize) {
         this.fileSize = fileSize;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FileItem item = (FileItem) o;
+
+        return path != null ? path.equals(item.path) : item.path == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return path != null ? path.hashCode() : 0;
     }
 }

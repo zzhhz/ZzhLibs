@@ -1,4 +1,4 @@
-package com.zzh.zlibs.image;
+package com.zzh.zlibs.image.runnable;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -6,11 +6,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.zzh.zlibs.image.model.FileItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -43,23 +45,39 @@ public class ScanImageRunnable implements Runnable {
         }
     }
 
+    public ScanImageRunnable setBuilder(Builder builder) {
+        this.builder = builder;
+        return this;
+    }
+
+    List<FileItem> list = new ArrayList<>();
+
     @Override
     public void run() {
         ContentResolver resolver = ctx.getContentResolver();
         Uri files = MediaStore.Files.getContentUri("external");
         String selection = " mime_type = ? or mime_type = ? or mime_type = ? ";
         String[] selectionArgs = {"image/jpeg", "image/png", "image/jpg"};
+        if (!TextUtils.isEmpty(builder.getBucketDisplayName())) {
+            selection = " bucket_display_name = ? and mime_type = ? or mime_type = ? or mime_type = ? ";
+            selectionArgs = new String[]{builder.getBucketDisplayName(), "image/jpeg", "image/png", "image/jpg"};
+        }
+
         if (builder.isScanVideo()) {
             selection = " mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? ";
             selectionArgs = new String[]{"image/jpeg", "image/png", "image/jpg", "video/mp4", "video/avi", "video/rm", "video/mkv", "video/flv"};
+            if (!TextUtils.isEmpty(builder.getBucketDisplayName())) {
+                selection = " bucket_display_name = ? and mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? ";
+                selectionArgs = new String[]{builder.getBucketDisplayName(), "image/jpeg", "image/png", "image/jpg", "video/mp4", "video/avi", "video/rm", "video/mkv", "video/flv"};
+            }
         }
-
-
+        Log.e("---------", "run: "+ Arrays.toString(selectionArgs));
+        Log.e("---------", "run: "+ selection);
         Cursor query = resolver.query(files, new String[]{MediaStore.Files.FileColumns._ID,
-                        MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.PARENT, "title", "mime_type", "width", "height", "mini_thumb_data", "size", "date_added"},
+                        MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.PARENT, "title", "mime_type", "width", "height", "mini_thumb_data", "_size", "date_added"},
                 selection,
                 selectionArgs, MediaStore.Images.Media.DATE_MODIFIED);
-        List<FileItem> list = new ArrayList<>();
+        list.clear();
         if (query != null) {
             int indexId = query.getColumnIndex("_id");
             int indexData = query.getColumnIndex("_data");
@@ -69,7 +87,7 @@ public class ScanImageRunnable implements Runnable {
             int indexWidth = query.getColumnIndex("width");
             int indexHeight = query.getColumnIndex("height");
             int indexThumb = query.getColumnIndex("mini_thumb_data");
-            int indexSize = query.getColumnIndex("size");
+            int indexSize = query.getColumnIndex("_size");
             int indexDate = query.getColumnIndex("date_added");
 
             while (query.moveToNext()) {
@@ -101,7 +119,12 @@ public class ScanImageRunnable implements Runnable {
         }
     }
 
-    public class Builder {
+    public List<FileItem> getImageFile() {
+        run();
+        return list;
+    }
+
+    public static class Builder {
         /**
          * 是否扫描图片
          */
@@ -110,6 +133,15 @@ public class ScanImageRunnable implements Runnable {
          * 是否扫描视频
          */
         private boolean scanVideo = true;
+        private String bucketDisplayName;
+
+        public String getBucketDisplayName() {
+            return bucketDisplayName;
+        }
+
+        public void setBucketDisplayName(String bucketDisplayName) {
+            this.bucketDisplayName = bucketDisplayName;
+        }
 
         public boolean isScanImage() {
             return scanImage;

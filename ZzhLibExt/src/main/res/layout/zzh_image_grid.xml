@@ -35,7 +35,7 @@
             android:textSize="18sp" />
 
         <FrameLayout
-            android:id="@+id/fl_confirm"
+            android:id="@+id/zh_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
