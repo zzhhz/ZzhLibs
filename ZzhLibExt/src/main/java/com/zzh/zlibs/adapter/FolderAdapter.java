@@ -77,6 +77,11 @@ public class FolderAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public void setSelected(int selected) {
+        this.selected = selected;
+        notifyDataSetChanged();
+    }
+
     class ViewHolder {
         TextView zzh_tv_title;
         RadioButton zzh_rb_folder;

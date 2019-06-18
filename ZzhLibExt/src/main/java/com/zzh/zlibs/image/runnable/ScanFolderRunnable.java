@@ -46,7 +46,7 @@ public class ScanFolderRunnable implements Runnable {
             selectionArgs = new String[]{"image/jpeg", "image/png", "image/jpg", "video/mp4", "video/avi", "video/rm", "video/mkv", "video/flv"};
         }
         Cursor query = resolver.query(files, new String[]{
-                        "bucket_display_name",},
+                        "DISTINCT bucket_display_name ",},
                 selection,
                 selectionArgs, MediaStore.Images.Media.DATE_MODIFIED);
         list.clear();
