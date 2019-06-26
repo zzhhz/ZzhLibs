@@ -8,8 +8,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.zzh.zlibs.R;
+import com.zzh.zlibs.image.loader.ImageLoader;
 import com.zzh.zlibs.image.model.FileItem;
+import com.zzh.zlibs.utils.ZUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,8 @@ public class ImageAdapter extends BaseAdapter {
     private Context ctx;
     private List<FileItem> selectList = new ArrayList<>();
     private int maxSelect = 9;
+    private ImageLoader imageLoader;
+
 
     public ImageAdapter(List<FileItem> dataList, Context ctx) {
         this(dataList, ctx, 9);
@@ -38,10 +43,15 @@ public class ImageAdapter extends BaseAdapter {
         if (ctx == null) {
             throw new NullPointerException("--Context 不能为空--");
         }
+        this.ctx = ctx;
+        this.maxSelect = maxSelect;
         if (dataList == null) {
             this.dataList = new ArrayList<>();
         }
         selectList.clear();
+        if (this.maxSelect <= 0 || this.maxSelect > 9) {
+            this.maxSelect = 1;
+        }
     }
 
     public List<FileItem> getSelectList() {
@@ -52,6 +62,7 @@ public class ImageAdapter extends BaseAdapter {
         if (dataList == null) {
             this.dataList = new ArrayList<>();
         }
+        this.dataList.addAll(dataList);
         notifyDataSetChanged();
     }
 
@@ -74,25 +85,30 @@ public class ImageAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(ctx).inflate(R.layout.zzh_item_folder, null);
+            convertView = LayoutInflater.from(ctx).inflate(R.layout.zzh_image, null);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.zzh_tv_title.setText(dataList.get(position).getTitle());
-        if (selectList.contains(getItem(position))) {
-            holder.zzh_iv_select.setImageResource(R.drawable.ic_selected);
+        final FileItem item = getItem(position);
+        if (selectList.contains(item)) {
+            ZUtils.tintDrawable(holder.zzh_iv_select.getDrawable(), "#40BB0A");
         } else {
-            holder.zzh_iv_select.setImageResource(-1);
+            ZUtils.tintDrawable(holder.zzh_iv_select.getDrawable(), "#999999");
         }
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectList.contains(getItem(position))) {
-                    selectList.remove(getItem(position));
+                if (selectList.contains(item)) {
+                    selectList.remove(item);
                 } else {
-                    selectList.add(getItem(position));
+                    if (selectList.size() > maxSelect) {
+
+                    } else {
+                        selectList.add(item);
+                    }
                 }
                 notifyDataSetChanged();
             }
@@ -100,6 +116,12 @@ public class ImageAdapter extends BaseAdapter {
         holder.zzh_iv_image.setOnClickListener(listener);
         holder.zzh_iv_select.setOnClickListener(listener);
         holder.zzh_tv_title.setOnClickListener(listener);
+        if (imageLoader == null) {
+            Glide.with(ctx).load(item.getPath()).into(holder.zzh_iv_image);
+        } else {
+            imageLoader.displayImage(item.getPath(), holder.zzh_iv_image, item.getWidth(), item.getHeight());
+        }
+
         return convertView;
     }
 

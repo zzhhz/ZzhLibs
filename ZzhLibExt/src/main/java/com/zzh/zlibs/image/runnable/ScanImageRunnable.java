@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.zzh.zlibs.BuildConfig;
 import com.zzh.zlibs.image.model.FileItem;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import java.util.List;
 public class ScanImageRunnable implements Runnable {
 
     public static final int RESUTL_SCAN_IMAGE = 5000;
+    private static final String TAG = "ScanImageRunnable";
 
     private Context ctx;
     private Builder builder;
@@ -121,6 +123,9 @@ public class ScanImageRunnable implements Runnable {
 
     public List<FileItem> getImageFile() {
         run();
+        if (BuildConfig.DEBUG){
+            Log.d(TAG, "getImageFile: "+list.size());
+        }
         return list;
     }
 

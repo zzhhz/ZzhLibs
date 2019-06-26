@@ -96,6 +96,6 @@ public class ImageGridActivity extends BaseActivity implements AdapterView.OnIte
         String title = popImageFolder.getFileItem(position).getTitle();
         mBuilder.setBucketDisplayName(title);
         List<FileItem> imageFile = scanImageRunnable.setBuilder(mBuilder).getImageFile();
-
+        imageAdapter.setDataList(imageFile);
     }
 }

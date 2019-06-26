@@ -11,6 +11,8 @@ import com.zzh.zlibs.image.model.FileItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.provider.MediaStore.MediaColumns.DATE_ADDED;
+
 /**
  * Created by Administrator.
  *
@@ -48,7 +50,7 @@ public class ScanFolderRunnable implements Runnable {
         Cursor query = resolver.query(files, new String[]{
                         "DISTINCT bucket_display_name ",},
                 selection,
-                selectionArgs, MediaStore.Images.Media.DATE_MODIFIED);
+                selectionArgs, DATE_ADDED +" DESC");
         list.clear();
         if (query != null) {
             int indexTitle = query.getColumnIndex("bucket_display_name");
