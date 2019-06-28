@@ -1,5 +1,8 @@
 package com.zzh.zlibs.image.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Objects;
 
 /**
@@ -12,7 +15,7 @@ import java.util.Objects;
  * @description: ZzhLibs 文件类
  * @since 1.0
  */
-public class FileItem {
+public class FileItem implements Parcelable {
     private int id;//_id
     private String path;//_data
     private String fileType;//mime_type
@@ -137,4 +140,55 @@ public class FileItem {
     public int hashCode() {
         return path != null ? path.hashCode() : 0;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.path);
+        dest.writeString(this.fileType);
+        dest.writeString(this.title);
+        dest.writeLong(this.date_added);
+        dest.writeLong(this.date_modified);
+        dest.writeInt(this.width);
+        dest.writeInt(this.height);
+        dest.writeLong(this.fileSize);
+        dest.writeString(this.mime_type);
+        dest.writeString(this.thumb);
+        dest.writeString(this.parent);
+    }
+
+    public FileItem() {
+    }
+
+    protected FileItem(Parcel in) {
+        this.id = in.readInt();
+        this.path = in.readString();
+        this.fileType = in.readString();
+        this.title = in.readString();
+        this.date_added = in.readLong();
+        this.date_modified = in.readLong();
+        this.width = in.readInt();
+        this.height = in.readInt();
+        this.fileSize = in.readLong();
+        this.mime_type = in.readString();
+        this.thumb = in.readString();
+        this.parent = in.readString();
+    }
+
+    public static final Parcelable.Creator<FileItem> CREATOR = new Parcelable.Creator<FileItem>() {
+        @Override
+        public FileItem createFromParcel(Parcel source) {
+            return new FileItem(source);
+        }
+
+        @Override
+        public FileItem[] newArray(int size) {
+            return new FileItem[size];
+        }
+    };
 }

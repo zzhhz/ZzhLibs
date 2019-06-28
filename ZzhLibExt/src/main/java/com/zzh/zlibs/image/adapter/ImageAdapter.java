@@ -1,15 +1,19 @@
 package com.zzh.zlibs.image.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.zzh.zlibs.R;
+import com.zzh.zlibs.image.ImageGridActivity;
 import com.zzh.zlibs.image.loader.ImageLoader;
 import com.zzh.zlibs.image.model.FileItem;
 import com.zzh.zlibs.utils.ZUtils;
@@ -29,17 +33,22 @@ import java.util.List;
  */
 public class ImageAdapter extends BaseAdapter {
     private List<FileItem> dataList;
-    private Context ctx;
+    private Activity ctx;
     private List<FileItem> selectList = new ArrayList<>();
     private int maxSelect = 9;
     private ImageLoader imageLoader;
 
+    public OnClickImageListener onClickImageListener;
 
-    public ImageAdapter(List<FileItem> dataList, Context ctx) {
-        this(dataList, ctx, 9);
+    public void setOnClickImageListener(OnClickImageListener onClickImageListener) {
+        this.onClickImageListener = onClickImageListener;
     }
 
-    public ImageAdapter(List<FileItem> dataList, Context ctx, int maxSelect) {
+    public boolean isSingle() {
+        return maxSelect == 1;
+    }
+
+    public ImageAdapter(List<FileItem> dataList, Activity ctx, int maxSelect) {
         if (ctx == null) {
             throw new NullPointerException("--Context 不能为空--");
         }
@@ -101,16 +110,9 @@ public class ImageAdapter extends BaseAdapter {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectList.contains(item)) {
-                    selectList.remove(item);
-                } else {
-                    if (selectList.size() > maxSelect) {
-
-                    } else {
-                        selectList.add(item);
-                    }
+                if (onClickImageListener != null) {
+                    onClickImageListener.onClickImage(v, position);
                 }
-                notifyDataSetChanged();
             }
         };
         holder.zzh_iv_image.setOnClickListener(listener);
@@ -122,7 +124,17 @@ public class ImageAdapter extends BaseAdapter {
             imageLoader.displayImage(item.getPath(), holder.zzh_iv_image, item.getWidth(), item.getHeight());
         }
 
+        if (isSingle()) {
+            holder.zzh_iv_select.setVisibility(View.GONE);
+        } else {
+            holder.zzh_iv_select.setVisibility(View.VISIBLE);
+        }
+
         return convertView;
+    }
+
+    public boolean contains(int position) {
+        return getSelectList().contains(getItem(position));
     }
 
     class ViewHolder {
@@ -135,5 +147,9 @@ public class ImageAdapter extends BaseAdapter {
             zzh_iv_image = item.findViewById(R.id.zzh_iv_image);
             zzh_tv_title = item.findViewById(R.id.zzh_tv_title);
         }
+    }
+
+    public interface OnClickImageListener {
+        void onClickImage(View v, int position);
     }
 }

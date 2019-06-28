@@ -73,12 +73,12 @@ public class ScanImageRunnable implements Runnable {
                 selectionArgs = new String[]{builder.getBucketDisplayName(), "image/jpeg", "image/png", "image/jpg", "video/mp4", "video/avi", "video/rm", "video/mkv", "video/flv"};
             }
         }
-        Log.e("---------", "run: "+ Arrays.toString(selectionArgs));
-        Log.e("---------", "run: "+ selection);
+        Log.e("---------", "run: " + Arrays.toString(selectionArgs));
+        Log.e("---------", "run: " + selection);
         Cursor query = resolver.query(files, new String[]{MediaStore.Files.FileColumns._ID,
                         MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns.PARENT, "title", "mime_type", "width", "height", "mini_thumb_data", "_size", "date_added"},
                 selection,
-                selectionArgs, MediaStore.Images.Media.DATE_MODIFIED);
+                selectionArgs, MediaStore.Images.Media.DATE_MODIFIED + " DESC");
         list.clear();
         if (query != null) {
             int indexId = query.getColumnIndex("_id");
@@ -123,8 +123,8 @@ public class ScanImageRunnable implements Runnable {
 
     public List<FileItem> getImageFile() {
         run();
-        if (BuildConfig.DEBUG){
-            Log.d(TAG, "getImageFile: "+list.size());
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "getImageFile: " + list.size());
         }
         return list;
     }
