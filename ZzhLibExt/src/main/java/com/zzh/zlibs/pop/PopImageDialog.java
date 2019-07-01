@@ -34,7 +34,7 @@ public class PopImageDialog {
 
     private Activity ctx;
 
-    public PopImageDialog popImageDialog(final Activity ctx, AdapterView.OnItemClickListener onItemClickListener) {
+    public PopImageDialog popImageDialog(final Activity ctx, final AdapterView.OnItemClickListener onItemClickListener) {
         this.ctx = ctx;
         View view = LayoutInflater.from(ctx).inflate(R.layout.zzh_pop_image, null);
         window = new PopupWindow(view, ZUtils.getDisplayWidth(ctx), ZUtils.getDisplayHeight(ctx) * 65 / 100);
@@ -42,12 +42,19 @@ public class PopImageDialog {
         adapter = new FolderAdapter(ctx, runnable.getImageFolder());
         ListView listView = view.findViewById(R.id.zzh_list);
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(onItemClickListener);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(parent, view, position, id);
+                }
+                window.dismiss();
+            }
+        });
         window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         window.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                backgroundAlpha(ctx, 1f);
             }
         });
         window.setOutsideTouchable(true);
@@ -59,17 +66,10 @@ public class PopImageDialog {
     }
 
     public void showBottom(View parent) {
-        backgroundAlpha(ctx, 0.6f);
         window.showAtLocation(parent, Gravity.BOTTOM, 0, ZUtils.dp2px(ctx, 50));
     }
 
     public FileItem getFileItem(int position) {
         return adapter.getItem(position);
-    }
-
-    private void backgroundAlpha(Activity ctx, float bgAlpha) {
-        WindowManager.LayoutParams lp = ctx.getWindow().getAttributes();
-        lp.alpha = bgAlpha; //0.0-1.0
-        ctx.getWindow().setAttributes(lp);
     }
 }

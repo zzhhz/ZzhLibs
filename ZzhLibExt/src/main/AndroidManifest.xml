@@ -12,7 +12,8 @@
 
         <activity android:name=".camera.Camera21Activity" />
         <activity android:name=".camera.CameraActivity" />
-        <activity android:name=".image.ImageGridActivity" />
+        <activity android:name=".image.ImageGridActivity"
+            android:theme="@style/Theme.Translucent.System.Bar"/>
     </application>
 
 </manifest>

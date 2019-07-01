@@ -137,6 +137,12 @@ public class ImageAdapter extends BaseAdapter {
         return getSelectList().contains(getItem(position));
     }
 
+    public void clear() {
+        if (dataList != null) {
+            dataList.clear();
+        }
+    }
+
     class ViewHolder {
         TextView zzh_tv_title;
         ImageView zzh_iv_select;

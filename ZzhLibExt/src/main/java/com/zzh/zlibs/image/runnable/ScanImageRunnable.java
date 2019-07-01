@@ -69,7 +69,7 @@ public class ScanImageRunnable implements Runnable {
             selection = " mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? ";
             selectionArgs = new String[]{"image/jpeg", "image/png", "image/jpg", "video/mp4", "video/avi", "video/rm", "video/mkv", "video/flv"};
             if (!TextUtils.isEmpty(builder.getBucketDisplayName())) {
-                selection = " bucket_display_name = ? and mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? ";
+                selection = " bucket_display_name = ? and (mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? or mime_type = ? )";
                 selectionArgs = new String[]{builder.getBucketDisplayName(), "image/jpeg", "image/png", "image/jpg", "video/mp4", "video/avi", "video/rm", "video/mkv", "video/flv"};
             }
         }
@@ -146,6 +146,9 @@ public class ScanImageRunnable implements Runnable {
 
         public void setBucketDisplayName(String bucketDisplayName) {
             this.bucketDisplayName = bucketDisplayName;
+            if ("全部图片".equals(bucketDisplayName)) {
+                this.bucketDisplayName = null;
+            }
         }
 
         public boolean isScanImage() {

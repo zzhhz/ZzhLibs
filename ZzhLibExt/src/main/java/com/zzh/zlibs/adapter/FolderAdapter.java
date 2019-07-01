@@ -31,14 +31,18 @@ public class FolderAdapter extends BaseAdapter {
     private int selected = -1;
 
     public FolderAdapter(Context ctx, List<FileItem> dataList) {
-        this.dataList = dataList;
         this.ctx = ctx;
         if (ctx == null) {
             throw new NullPointerException("--Context 不能为空--");
         }
+
         if (dataList == null) {
             this.dataList = new ArrayList<>();
         }
+        FileItem item = new FileItem();
+        item.setTitle("全部图片");
+        this.dataList.add(item);
+        this.dataList.addAll(dataList);
     }
 
     @Override

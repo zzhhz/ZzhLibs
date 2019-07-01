@@ -43,7 +43,7 @@ public class ImageGridActivity extends BaseActivity implements AdapterView.OnIte
     private int maxCount = 9;
 
 
-    ImageView zh_back;
+    View zh_back;
     TextView zh_title;
     TextView zh_select_num;
     TextView zh_folder_name;
@@ -107,6 +107,7 @@ public class ImageGridActivity extends BaseActivity implements AdapterView.OnIte
     @Override
     protected void initSetListener() {
         zh_folder_name.setOnClickListener(this);
+        zh_back.setOnClickListener(this);
     }
 
     @Override
@@ -136,9 +137,13 @@ public class ImageGridActivity extends BaseActivity implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        popImageFolder.setSelectPosition(position);
         String title = popImageFolder.getFileItem(position).getTitle();
+        zh_folder_name.setText(title);
+        zh_title.setText(title);
         mBuilder.setBucketDisplayName(title);
         List<FileItem> imageFile = scanImageRunnable.setBuilder(mBuilder).getImageFile();
+        imageAdapter.clear();
         imageAdapter.setDataList(imageFile);
     }
 
