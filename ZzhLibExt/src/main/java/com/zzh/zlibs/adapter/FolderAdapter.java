@@ -38,6 +38,8 @@ public class FolderAdapter extends BaseAdapter {
 
         if (dataList == null) {
             this.dataList = new ArrayList<>();
+        } else {
+            this.dataList = dataList;
         }
         FileItem item = new FileItem();
         item.setTitle("全部图片");
