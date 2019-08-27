@@ -20,11 +20,14 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.zzh.zlibs.camera.Camera21Activity;
 import com.zzh.zlibs.camera.CameraActivity;
 import com.zzh.zlibs.camera.preview.BaseCameraActivity;
+import com.zzh.zlibs.image.model.FileItem;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +37,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,7 +48,7 @@ import java.util.regex.Pattern;
  * @Email: zzh_hz@126.com
  * @QQ: 1299234582
  * @Author: zzh
- * @Description: 对一些工具的封装<br/>
+ * @Description: 对一些工具的封装<br />
  * 1.单位转换<br/>
  * 2.日期格式化<br/>
  * 3.网络判断<br/>
@@ -617,6 +621,37 @@ public class ZUtils {
         } else {
             ctx.startActivity(intent);
         }
-
     }
+
+    public static void checkZoomLevels(float minZoom, float midZoom,
+                                       float maxZoom) {
+        if (minZoom >= midZoom) {
+            throw new IllegalArgumentException(
+                    "Minimum zoom has to be less than Medium zoom. Call setMinimumZoom() with a more appropriate value");
+        } else if (midZoom >= maxZoom) {
+            throw new IllegalArgumentException(
+                    "Medium zoom has to be less than Maximum zoom. Call setMaximumZoom() with a more appropriate value");
+        }
+    }
+
+    public static boolean hasDrawable(ImageView imageView) {
+        return imageView.getDrawable() != null;
+    }
+
+    public static boolean isSupportedScaleType(final ImageView.ScaleType scaleType) {
+        if (scaleType == null) {
+            return false;
+        }
+        switch (scaleType) {
+            case MATRIX:
+                throw new IllegalStateException("Matrix scale type is not supported");
+        }
+        return true;
+    }
+
+    public static int getPointerIndex(int action) {
+        return (action & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+    }
+
+    public static List<FileItem> fileItems;
 }

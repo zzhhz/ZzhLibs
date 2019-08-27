@@ -3,6 +3,7 @@ package com.zzh.zlibs.image.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,10 @@ public class ImageAdapter extends BaseAdapter {
         }
     }
 
+    public ArrayList<FileItem> getDataList() {
+        return (ArrayList<FileItem>) dataList;
+    }
+
     public List<FileItem> getSelectList() {
         return selectList;
     }
@@ -103,8 +108,10 @@ public class ImageAdapter extends BaseAdapter {
         holder.zzh_tv_title.setText(dataList.get(position).getTitle());
         final FileItem item = getItem(position);
         if (selectList.contains(item)) {
+            holder.zzh_iv_image.setColorFilter(Color.parseColor("#80000000"));
             ZUtils.tintDrawable(holder.zzh_iv_select.getDrawable(), "#40BB0A");
         } else {
+            holder.zzh_iv_image.clearColorFilter();
             ZUtils.tintDrawable(holder.zzh_iv_select.getDrawable(), "#999999");
         }
         View.OnClickListener listener = new View.OnClickListener() {
@@ -129,6 +136,15 @@ public class ImageAdapter extends BaseAdapter {
         } else {
             holder.zzh_iv_select.setVisibility(View.VISIBLE);
         }
+
+        holder.zzh_iv_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onClickImageListener != null) {
+                    onClickImageListener.onClickPreviewImage(v, position);
+                }
+            }
+        });
 
         return convertView;
     }
@@ -157,5 +173,7 @@ public class ImageAdapter extends BaseAdapter {
 
     public interface OnClickImageListener {
         void onClickImage(View v, int position);
+
+        void onClickPreviewImage(View v, int position);
     }
 }

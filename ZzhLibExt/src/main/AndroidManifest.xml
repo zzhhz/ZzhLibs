@@ -1,19 +1,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zzh.zlibs">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-    <uses-feature android:name="android.hardware.camera" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application>
 
         <activity android:name=".camera.Camera21Activity" />
         <activity android:name=".camera.CameraActivity" />
-        <activity android:name=".image.ImageGridActivity"
-            android:theme="@style/Theme.Translucent.System.Bar"/>
+        <activity
+            android:name=".image.ImageGridActivity"
+            android:theme="@style/Theme.Translucent.System.Bar" />
+        <activity
+            android:name=".image.ImageDetailActivity"
+            android:theme="@style/Theme.Translucent.System.Bar" />
     </application>
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>

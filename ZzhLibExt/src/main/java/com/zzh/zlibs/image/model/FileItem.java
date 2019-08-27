@@ -141,6 +141,9 @@ public class FileItem implements Parcelable {
         return path != null ? path.hashCode() : 0;
     }
 
+    public FileItem() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -148,39 +151,14 @@ public class FileItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
         dest.writeString(this.path);
-        dest.writeString(this.fileType);
-        dest.writeString(this.title);
-        dest.writeLong(this.date_added);
-        dest.writeLong(this.date_modified);
-        dest.writeInt(this.width);
-        dest.writeInt(this.height);
-        dest.writeLong(this.fileSize);
-        dest.writeString(this.mime_type);
-        dest.writeString(this.thumb);
-        dest.writeString(this.parent);
-    }
-
-    public FileItem() {
     }
 
     protected FileItem(Parcel in) {
-        this.id = in.readInt();
         this.path = in.readString();
-        this.fileType = in.readString();
-        this.title = in.readString();
-        this.date_added = in.readLong();
-        this.date_modified = in.readLong();
-        this.width = in.readInt();
-        this.height = in.readInt();
-        this.fileSize = in.readLong();
-        this.mime_type = in.readString();
-        this.thumb = in.readString();
-        this.parent = in.readString();
     }
 
-    public static final Parcelable.Creator<FileItem> CREATOR = new Parcelable.Creator<FileItem>() {
+    public static final Creator<FileItem> CREATOR = new Creator<FileItem>() {
         @Override
         public FileItem createFromParcel(Parcel source) {
             return new FileItem(source);

@@ -152,7 +152,7 @@ public class ImageGridActivity extends BaseActivity implements AdapterView.OnIte
         if (imageAdapter.contains(position)) {
             imageAdapter.getSelectList().remove(imageAdapter.getItem(position));
         } else {
-            if (imageAdapter.getSelectList().size() > maxCount) {
+            if (imageAdapter.getSelectList().size() >= maxCount) {
                 Toast.makeText(this, "您最多选择" + maxCount + "图片或视频", Toast.LENGTH_SHORT).show();
             } else {
                 imageAdapter.getSelectList().add(imageAdapter.getItem(position));
@@ -167,5 +167,11 @@ public class ImageGridActivity extends BaseActivity implements AdapterView.OnIte
         } else {
             zh_select_num.setText("完成(" + imageAdapter.getSelectList().size() + "/" + maxCount + ")");
         }
+    }
+
+    @Override
+    public void onClickPreviewImage(View v, int position) {
+        ImageDetailActivity.open(this, imageAdapter.getDataList(), position);
+
     }
 }
