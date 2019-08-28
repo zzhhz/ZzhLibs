@@ -131,11 +131,11 @@ public class ImageAdapter extends BaseAdapter {
             imageLoader.displayImage(item.getPath(), holder.zzh_iv_image, item.getWidth(), item.getHeight());
         }
 
-        if (isSingle()) {
+        /*if (isSingle()) {
             holder.zzh_iv_select.setVisibility(View.GONE);
         } else {
             holder.zzh_iv_select.setVisibility(View.VISIBLE);
-        }
+        }*/
 
         holder.zzh_iv_image.setOnClickListener(new View.OnClickListener() {
             @Override

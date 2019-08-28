@@ -2,6 +2,7 @@ package com.zzh.myapplication;
 
 import android.Manifest;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -9,15 +10,19 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.zzh.zlibs.image.ImageGridActivity;
+import com.zzh.zlibs.image.model.FileItem;
 import com.zzh.zlibs.image.runnable.ScanImageRunnable;
 import com.zzh.zlibs.utils.PermissionManager;
 import com.zzh.zlibs.utils.ZUtils;
 import com.zzh.zlibs.utils.thread.ZThreadLIFOManager;
 import com.zzh.zlibs.utils.thread.ZThreadManager;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.zzh.main.R;
+
+import static com.zzh.zlibs.image.ImageGridActivity.DATA_ZZH_IMAGE;
 
 public class MainActivity extends BaseGitActivity {
     @Override
@@ -40,12 +45,12 @@ public class MainActivity extends BaseGitActivity {
         findViewById(R.id.btn_image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, ImageGridActivity.class);
-                startActivity(intent);
+                ImageGridActivity.open(MainActivity.this, 100);
             }
         });
 
     }
+
 
     public void onClickView(View v) {
         checkPermissions();
@@ -131,6 +136,23 @@ public class MainActivity extends BaseGitActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult requestCode: " + requestCode + ", resultCode: " + resultCode + ", intent: " + data);
+        Log.d(TAG, "onActivityResult requestCode: " + requestCode + ", resultCode: " + resultCode + ", intent: " + parseIntent(data));
+    }
+
+    public String parseIntent(Intent intent) {
+        if (intent == null) {
+            return "";
+        }
+        if (intent.hasExtra(DATA_ZZH_IMAGE)) {
+            StringBuilder builder = new StringBuilder();
+            ArrayList<FileItem> extra = intent.getParcelableArrayListExtra(DATA_ZZH_IMAGE);
+            if (extra != null) {
+                for (FileItem item : extra) {
+                    builder.append(item.getPath()).append(", ");
+                }
+            }
+            return builder.toString();
+        }
+        return "";
     }
 }

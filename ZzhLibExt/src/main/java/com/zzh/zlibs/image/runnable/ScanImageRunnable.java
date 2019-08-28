@@ -112,7 +112,6 @@ public class ScanImageRunnable implements Runnable {
                 item.setTitle(title);
                 item.setThumb(thumb);
                 item.setFileSize(size);
-                item.setFileType(data);
                 item.setMime_type(mime);
                 item.setId(id);
                 item.setParent(display_name);

@@ -57,14 +57,29 @@ public class ImageGridActivity extends BaseActivity implements AdapterView.OnIte
     private ImageAdapter imageAdapter;
 
     /**
-     * @param ctx
-     * @param maxSelectCount
-     * @param requestCode
+     * 自定义选择图片多少
+     *
+     * @param ctx            上下文
+     * @param maxSelectCount 最多选择
+     * @param requestCode    请求码
      */
     public static void openSelectImage(Activity ctx, int maxSelectCount, int requestCode) {
         Intent intent = new Intent(ctx, ImageGridActivity.class);
-        intent.putExtra("maxCount", maxSelectCount);
+        if (maxSelectCount < 1 || maxSelectCount > 9) {
+            maxSelectCount = 1;
+        }
+        intent.putExtra(EXTRA_ZZH_MAX_IMAGE, maxSelectCount);
         ctx.startActivityForResult(intent, requestCode);
+    }
+
+    /**
+     * 单选图片
+     *
+     * @param ctx         上下文
+     * @param requestCode 请求码
+     */
+    public static void open(Activity ctx, int requestCode) {
+        openSelectImage(ctx, 1, requestCode);
     }
 
     @Override
@@ -90,10 +105,6 @@ public class ImageGridActivity extends BaseActivity implements AdapterView.OnIte
         if (maxCount <= 1 || maxCount > 9) {
             maxCount = 1;
         }
-        if (maxCount == 1) {
-            zh_confirm.setVisibility(View.GONE);
-        }
-        maxCount = 9;
 
         mBuilder = new ScanImageRunnable.Builder();
         mBuilder.setBucketDisplayName("");
@@ -102,12 +113,14 @@ public class ImageGridActivity extends BaseActivity implements AdapterView.OnIte
         imageAdapter.setOnClickImageListener(this);
         zh_grid.setAdapter(imageAdapter);
         imageAdapter.setDataList(scanImageRunnable.getImageFile());
+        zh_select_num.setText("完成(" + imageAdapter.getSelectList().size() + "/" + maxCount + ")");
     }
 
     @Override
     protected void initSetListener() {
         zh_folder_name.setOnClickListener(this);
         zh_back.setOnClickListener(this);
+        zh_confirm.setOnClickListener(this);
     }
 
     @Override
@@ -123,10 +136,12 @@ public class ImageGridActivity extends BaseActivity implements AdapterView.OnIte
             }
             popImageFolder.showBottom(zh_confirm);
         } else if (v == zh_back) {
+            finish();
+        } else if (zh_confirm == v) {
             if (imageAdapter.getSelectList().size() > 0) {
                 setResult(RESULT_OK);
                 Intent intent = new Intent();
-                intent.putExtra(DATA_ZZH_IMAGE, (ArrayList) imageAdapter.getSelectList());
+                intent.putParcelableArrayListExtra(DATA_ZZH_IMAGE, (ArrayList) imageAdapter.getSelectList());
                 setResult(RESULT_OK, intent);
             } else {
                 setResult(RESULT_CANCELED);
@@ -159,14 +174,7 @@ public class ImageGridActivity extends BaseActivity implements AdapterView.OnIte
             }
         }
         imageAdapter.notifyDataSetChanged();
-        if (maxCount == 1) {
-            Intent intent = new Intent();
-            intent.putExtra(ImageGridActivity.DATA_ZZH_IMAGE, (ArrayList) imageAdapter.getSelectList());
-            setResult(Activity.RESULT_OK, intent);
-            finish();
-        } else {
-            zh_select_num.setText("完成(" + imageAdapter.getSelectList().size() + "/" + maxCount + ")");
-        }
+        zh_select_num.setText("完成(" + imageAdapter.getSelectList().size() + "/" + maxCount + ")");
     }
 
     @Override

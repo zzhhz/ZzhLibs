@@ -17,8 +17,7 @@ import java.util.Objects;
  */
 public class FileItem implements Parcelable {
     private int id;//_id
-    private String path;//_data
-    private String fileType;//mime_type
+    private String path;//_data //图片路径
     private String title;//title
     private long date_added;
     private long date_modified;
@@ -68,14 +67,6 @@ public class FileItem implements Parcelable {
 
     public void setPath(String path) {
         this.path = path;
-    }
-
-    public String getFileType() {
-        return fileType;
-    }
-
-    public void setFileType(String fileType) {
-        this.fileType = fileType;
     }
 
     public String getTitle() {
@@ -152,10 +143,18 @@ public class FileItem implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.path);
+        dest.writeString(this.title);
+        dest.writeInt(this.width);
+        dest.writeInt(this.height);
+        dest.writeString(this.mime_type);
     }
 
     protected FileItem(Parcel in) {
         this.path = in.readString();
+        this.title = in.readString();
+        this.width = in.readInt();
+        this.height = in.readInt();
+        this.mime_type = in.readString();
     }
 
     public static final Creator<FileItem> CREATOR = new Creator<FileItem>() {
