@@ -1,5 +1,7 @@
 package com.zzh.zlibs.utils;
 
+import android.content.Context;
+import android.os.Environment;
 import android.sax.TextElementListener;
 import android.text.TextUtils;
 
@@ -62,4 +64,21 @@ public class FileUtils {
         }
         return false;
     }
+
+    /**
+     * 私有缓存目录。如果需要缓存多重类型的文件，建议在此目录下再次进行新建目录划分
+     *
+     * @return 缓存路径
+     */
+    public static String getPrivateCachePath(Context ctx) {
+        File cacheDir = null;
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            cacheDir = ctx.getExternalCacheDir();
+        } else {
+            cacheDir = ctx.getCacheDir();
+        }
+        return cacheDir.getAbsolutePath();
+    }
+
+
 }
