@@ -2,16 +2,16 @@ package com.zzh.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.zzh.main.R;
 import com.zzh.zlibs.swipe.activity.SwipeBackActivity;
+
+import androidx.annotation.NonNull;
 
 public class Main2Activity extends SwipeBackActivity {
 

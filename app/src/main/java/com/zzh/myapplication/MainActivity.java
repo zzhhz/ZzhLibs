@@ -2,25 +2,21 @@ package com.zzh.myapplication;
 
 import android.Manifest;
 import android.content.Intent;
-import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.zzh.zlibs.image.ImageGridActivity;
+import com.zzh.main.R;
 import com.zzh.zlibs.image.model.FileItem;
-import com.zzh.zlibs.image.runnable.ScanImageRunnable;
 import com.zzh.zlibs.utils.PermissionManager;
 import com.zzh.zlibs.utils.ZUtils;
-import com.zzh.zlibs.utils.thread.ZThreadLIFOManager;
 import com.zzh.zlibs.utils.thread.ZThreadManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.zzh.main.R;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 
 import static com.zzh.zlibs.image.ImageGridActivity.DATA_ZZH_IMAGE;
 
@@ -42,12 +38,7 @@ public class MainActivity extends BaseGitActivity {
                 startActivity(intent);
             }
         });
-        findViewById(R.id.btn_image).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ImageGridActivity.open(MainActivity.this, 100);
-            }
-        });
+
 
     }
 
@@ -66,7 +57,7 @@ public class MainActivity extends BaseGitActivity {
                 new PermissionManager.PermissionRequestSuccessCallBack() {
                     @Override
                     public void onHasPermission() {
-                        Log.d(TAG, "onHasPermission: 已经授予了权限");
+                        ZUtils.openCamera(mContext, getCacheDir()+"/"+System.currentTimeMillis()+".png");
                     }
                 });
     }

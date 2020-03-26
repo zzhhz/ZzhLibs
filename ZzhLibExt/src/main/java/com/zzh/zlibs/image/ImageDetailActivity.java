@@ -3,7 +3,6 @@ package com.zzh.zlibs.image;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Message;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,7 +13,8 @@ import com.zzh.zlibs.image.adapter.ImageDetailAdapter;
 import com.zzh.zlibs.image.model.FileItem;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import androidx.viewpager.widget.ViewPager;
 
 import static com.zzh.zlibs.utils.ZUtils.fileItems;
 

@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onClickView"
-        android:text="检查权限" />
+        android:text="原生相机" />
 
     <Button
         android:id="@+id/button2"
@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onClickCheckPermission"
-        android:text="申请权限PersmissionManager" />
+        android:text="原生相机" />
 
     <Button
         android:id="@+id/button4"

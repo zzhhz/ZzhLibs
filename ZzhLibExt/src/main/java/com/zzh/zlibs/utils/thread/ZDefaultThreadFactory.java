@@ -1,9 +1,9 @@
 package com.zzh.zlibs.utils.thread;
 
-import android.support.annotation.NonNull;
-
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import androidx.annotation.NonNull;
 
 /**
  * Created by Administrator.

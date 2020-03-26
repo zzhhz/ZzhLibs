@@ -2,11 +2,12 @@
 package com.zzh.zlibs.swipe.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.zzh.zlibs.swipe.SwipeBackLayout;
 import com.zzh.zlibs.swipe.Utils;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class SwipeBackActivity extends AppCompatActivity implements SwipeBackActivityBase {
     private SwipeBackActivityHelper mHelper;

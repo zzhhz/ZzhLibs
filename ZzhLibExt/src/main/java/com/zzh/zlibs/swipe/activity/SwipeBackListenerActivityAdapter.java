@@ -1,12 +1,13 @@
 package com.zzh.zlibs.swipe.activity;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
 
 import com.zzh.zlibs.swipe.SwipeBackLayout;
 import com.zzh.zlibs.swipe.Utils;
 
 import java.lang.ref.WeakReference;
+
+import androidx.annotation.NonNull;
 
 
 /**

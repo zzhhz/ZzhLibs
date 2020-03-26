@@ -1,10 +1,10 @@
 package com.zzh.zlibs.utils.thread;
 
-import android.support.annotation.NonNull;
-
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import androidx.annotation.NonNull;
 
 /**
  * Created by Administrator.

@@ -1,17 +1,13 @@
 package com.zzh.zlibs.image;
 
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Message;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +37,6 @@ public class ImageGridActivity extends BaseActivity implements AdapterView.OnIte
     public static final String EXTRA_ZZH_MAX_IMAGE = "zzh_max_count";
 
     private int maxCount = 9;
-
 
     View zh_back;
     TextView zh_title;
