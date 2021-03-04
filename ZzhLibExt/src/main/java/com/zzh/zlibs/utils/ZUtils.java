@@ -21,7 +21,6 @@ import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.zzh.zlibs.camera.Camera21Activity;
 import com.zzh.zlibs.camera.CameraActivity;
 import com.zzh.zlibs.camera.preview.BaseCameraActivity;
 import com.zzh.zlibs.image.model.FileItem;
@@ -610,11 +609,11 @@ public class ZUtils {
      */
     public static void openCamera(Context ctx, String outputFile) {
         Intent intent = new Intent();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             intent.setClass(ctx, Camera21Activity.class);
         } else {
-            intent.setClass(ctx, CameraActivity.class);
-        }
+        }*/
+        intent.setClass(ctx, CameraActivity.class);
         intent.putExtra(BaseCameraActivity.EXTRA_OUTPUT_FILE, outputFile);
         if (ctx instanceof Activity) {
             ((Activity) ctx).startActivityForResult(intent, REQUEST_OPEN_CAMERA);

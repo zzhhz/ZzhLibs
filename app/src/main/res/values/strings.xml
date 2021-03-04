@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">自题依赖</string>
+    <string name="zh_base_lib_app_name">自题依赖</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
